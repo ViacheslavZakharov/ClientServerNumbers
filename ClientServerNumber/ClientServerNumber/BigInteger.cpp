@@ -702,28 +702,9 @@ int BigInteger::Sign()
 
 string BigInteger::ToString()
 {
-	string str = "";
-	if (BigInteger::_digits.empty())
-	{
-		str += "0";
-	}
-	else {
-		if (_sign == -1)
-		{
-			str += '-';
-		}
-		str += to_string(_digits.back());
-
-		// Функция fill необходима для того, чтобы цифры печатались без разрывов.
-		//char old_fill = os.fill('0');
-		for (long long i = static_cast<long long>(_digits.size()) - 2; i >= 0; --i)
-		{
-			// Функция setw устанавливает ширину поля, использующуюся для операции вывода.
-			str += to_string(_digits[i]);
-		}
-		//os.fill(old_fill);
-	}
-	return str;
+	stringstream ss;
+	ss << *this;
+	return ss.str();
 }
 
 BigInteger BigInteger::_one = BigInteger("1");

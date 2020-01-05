@@ -21,12 +21,18 @@
     <ClCompile Include="BigInteger.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="ServerNumber.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="RationalNumerics.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BigInteger.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerNumber.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="RationalNumerics.h">

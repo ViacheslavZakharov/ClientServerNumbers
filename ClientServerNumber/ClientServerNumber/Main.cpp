@@ -1,5 +1,6 @@
 #include <iostream>
-#include "BigInteger.h"
+//#include "BigInteger.h"
+#include "RationalNumerics.h"
 
 using namespace std;
 
@@ -53,6 +54,8 @@ int main()
 	////cout << BigInteger::Divide(BigInteger("8"),BigInteger("4")) << "\n";
 	//cout << BigInteger::Remainder(BigInteger("108"), BigInteger("10")) << "\n";
 	//count <<;
+	const string LONG_POSITIVE_STRING = "1234567891011121314";
+	cout<<BigInteger(LONG_POSITIVE_STRING);
 	cout << "Hello World!\n";
 	//cout << BigInteger("1") / BigInteger("0");
 	//b3 = b3.pow(5);
@@ -61,6 +64,11 @@ int main()
 	cout << BigInteger::Abs(BigInteger("1"))<<"\n";
 	cout << BigInteger::Abs(BigInteger("-1")) << "\n";
 	cout << BigInteger::Abs(BigInteger("0")) << "\n";
+	RationalNumerics r1(BigInteger("2222"), BigInteger("4444"));
+	RationalNumerics r2 = RationalNumerics();
+	auto str = r1.ToString();
+	cout << r1;
+	cout << "\n" << r2;
 	system("pause");
 	return 0;
 }

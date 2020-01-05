@@ -1,10 +1,16 @@
+#pragma once
 #include "BigInteger.h"
 
 class RationalNumerics
 {
 public:
+
+	RationalNumerics();
 	// Конструктор, принимающий числитель и знаменатель.
 	RationalNumerics(BigInteger numerator, BigInteger denominator);
+
+	// Конструктор, принимающий числитель и знаменатель в виде строки.
+	RationalNumerics(string numerator, string denominator);
 
 	// Конструктор принимающий только целое число, знаменатель = 1.
 	RationalNumerics(BigInteger numerator);
@@ -24,11 +30,39 @@ public:
 	// Знак.
 	int Sign();
 
+	string ToString();
+
 	// Получить целую часть.
 	BigInteger GetWholePart();
 
+	// Получить дробную часть.
+	RationalNumerics GetFractionPart();
+
 	// Сокращает дробь.
 	void SimplifyFraction();
+
+	const RationalNumerics operator +() const;
+	const RationalNumerics operator -() const;
+	const RationalNumerics operator ++();
+	//const RationalNumerics operator ++(int);
+	const RationalNumerics operator --();
+	//const RationalNumerics operator --(int);
+	//     a/b = c/d, iff ad = bc
+	friend bool operator ==(const RationalNumerics&, const RationalNumerics&);
+	friend bool operator <(const RationalNumerics&, const RationalNumerics&);
+	friend bool operator !=(const RationalNumerics&, const RationalNumerics&);
+	friend bool operator <=(const RationalNumerics&, const RationalNumerics&);
+	friend bool operator >(const RationalNumerics&, const RationalNumerics&);
+	friend bool operator >=(const RationalNumerics&, const RationalNumerics&);
+
+	friend const RationalNumerics operator +(RationalNumerics, const RationalNumerics&);
+	friend const RationalNumerics operator -(RationalNumerics, const RationalNumerics&);
+	friend const RationalNumerics operator *(RationalNumerics, const RationalNumerics&);
+	friend const RationalNumerics operator /(RationalNumerics, const RationalNumerics&);
+	friend const RationalNumerics operator %(RationalNumerics, const RationalNumerics&);
+
+	friend ostream& operator <<(ostream&, const RationalNumerics&);
+	operator string() const;
 
 	~RationalNumerics();
 
@@ -43,6 +77,5 @@ private:
 	BigInteger _denominator;
 
 	int _sign;
-
 };
 
