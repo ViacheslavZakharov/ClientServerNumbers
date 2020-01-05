@@ -27,6 +27,9 @@ public:
 	// Получить целую часть.
 	BigInteger GetWholePart();
 
+	// Сокращает дробь.
+	void SimplifyFraction();
+
 	~RationalNumerics();
 
 private:

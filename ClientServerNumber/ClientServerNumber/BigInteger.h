@@ -91,7 +91,14 @@ public:
 	// Делит два числа.
 	static BigInteger Divide(BigInteger numerator, BigInteger denominator);
 
+	// Получает остаток от деления.
 	static BigInteger Remainder(BigInteger numerator, BigInteger denominator);
+
+	// Получает модуль числа.
+	static BigInteger Abs(BigInteger number);
+
+	// Получает наибольший общий делитель.
+	static BigInteger GreatestCommonDivisor(BigInteger numerator, BigInteger denominator);
 private:
 	// внутреннее хранилище числа
 	vector<int> _digits;

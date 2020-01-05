@@ -2,8 +2,28 @@
 
 RationalNumerics::RationalNumerics(BigInteger numerator, BigInteger denominator)
 {
-	_numerator = numerator;
-	_denominator = denominator;
+	if (denominator.Sign() == 0)
+	{
+		throw "Divide by zerro exception";
+	}
+	else if (numerator.Sign() == 0)
+	{
+		this->_sign = 0;
+		_numerator = BigInteger::Zero();
+		_denominator = denominator;
+	}
+	else if(numerator.Sign() == denominator.Sign())
+	{
+		this->_sign = 1;
+		_numerator = BigInteger::Abs(numerator);
+		_denominator = BigInteger::Abs(denominator);
+	}
+	else
+	{
+		this->_sign = -1;
+		_numerator = BigInteger::Abs(numerator);
+		_denominator = BigInteger::Abs(denominator);
+	}
 }
 
 RationalNumerics::RationalNumerics(BigInteger numerator)
@@ -46,6 +66,11 @@ int RationalNumerics::Sign()
 BigInteger RationalNumerics::GetWholePart()
 {
 	return BigInteger::Divide(_numerator, _denominator);
+}
+
+// Сокращает дробь.
+void RationalNumerics::SimplifyFraction()
+{
 }
 
 RationalNumerics::~RationalNumerics()

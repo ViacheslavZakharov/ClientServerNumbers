@@ -23,6 +23,10 @@ BigInteger::BigInteger(string str)
 			str = str.substr(1);
 			this->_sign = -1;
 		}
+		else if (str.length() == 1 && str[0] == '0')
+		{
+			this->_sign = 0;
+		}
 		else
 		{
 			this->_sign = 1;
@@ -49,11 +53,6 @@ void BigInteger::RemoveLeadingZeros()
 	while (this->_digits.size() > 1 && this->_digits.back() == 0)
 	{
 		this->_digits.pop_back();
-	}
-
-	if (this->_digits.size() == 1 && this->_digits[0] == 0)
-	{
-		this->_sign = 1;
 	}
 }
 
@@ -245,6 +244,18 @@ const BigInteger operator +(BigInteger left, const BigInteger& right)
 		}
 	}
 
+	if (left._digits.size() == 1 && left._digits[0] == 0)
+	{
+		left._sign = 0;
+	}
+	else if (left > 0)
+	{
+		left._sign = 1;
+	}
+	else
+	{
+		left._sign = -1;
+	}
 	return left;
 }
 
@@ -290,7 +301,14 @@ BigInteger::BigInteger(signed char c)
 // Преобразует unsigned char к BigInteger.
 BigInteger::BigInteger(unsigned char c)
 {
-	this->_sign = -1;
+	if (c == 0)
+	{
+		this->_sign = 0;
+	}
+	else
+	{
+		this->_sign = 1;
+	}
 	this->_digits.push_back(c);
 }
 
@@ -316,7 +334,14 @@ BigInteger::BigInteger(signed short s)
 // Преобразует unsigned short к BigInteger.
 BigInteger::BigInteger(unsigned short s)
 {
-	this->_sign = -1;
+	if (s == 0)
+	{
+		this->_sign = 0;
+	}
+	else
+	{
+		this->_sign = 1;
+	}
 	this->_digits.push_back(s);
 }
 
@@ -345,6 +370,14 @@ BigInteger::BigInteger(signed int i) {
 // Преобразует unsigned int к BigInteger.
 BigInteger::BigInteger(unsigned int i)
 {
+	if (i == 0)
+	{
+		this->_sign = 0;
+	}
+	else
+	{
+		this->_sign = 1;
+	}
 	this->_digits.push_back(i % BigInteger::BASE);
 	i /= BigInteger::BASE;
 	if (i != 0)
@@ -379,6 +412,14 @@ BigInteger::BigInteger(signed long l)
 // Преобразует unsigned long к BigInteger.
 BigInteger::BigInteger(unsigned long l)
 {
+	if (l == 0)
+	{
+		this->_sign = 0;
+	}
+	else
+	{
+		this->_sign = 1;
+	}
 	this->_digits.push_back(l % BigInteger::BASE);
 	l /= BigInteger::BASE;
 	if (l != 0)
@@ -412,6 +453,14 @@ BigInteger::BigInteger(signed long long l)
 // Преобразует unsigned long long к BigInteger.
 BigInteger::BigInteger(unsigned long long l)
 {
+	if (l == 0)
+	{
+		this->_sign = 0;
+	}
+	else
+	{
+		this->_sign = 1;
+	}
 	this->_sign = 1;
 	do {
 		this->_digits.push_back(l % BigInteger::BASE);
@@ -466,6 +515,19 @@ const BigInteger operator -(BigInteger left, const BigInteger& right)
 	}
 
 	left.RemoveLeadingZeros();
+
+	if (left._digits.size() == 1 && left._digits[0] == 0)
+	{
+		left._sign = 0;
+	}
+	else if (left > 0)
+	{
+		left._sign = 1;
+	}
+	else
+	{
+		left._sign = -1;
+	}
 	return left;
 }
 
@@ -565,7 +627,7 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 		current = current - b * x;
 	}
 
-	if (left == 0 || right == 0)
+	if (left._digits.size() == 1 && left._digits[0] == 0)
 	{
 		result._sign = 0;
 	}
@@ -595,6 +657,19 @@ const BigInteger operator %(const BigInteger& left, const BigInteger& right)
 	{
 		result += right;
 	}
+	if (result._digits.size() == 1 && result._digits[0] == 0)
+	{
+		result._sign = 0;
+	}
+	else if (result > 0)
+	{
+		result._sign = 1;
+	}
+	else
+	{
+		result._sign = -1;
+	}
+
 	return result;
 }
 
@@ -680,6 +755,34 @@ BigInteger BigInteger::Divide(BigInteger numerator, BigInteger denominator)
 BigInteger BigInteger::Remainder(BigInteger numerator, BigInteger denominator)
 {
 	return numerator % denominator;
+}
+
+BigInteger BigInteger::Abs(BigInteger number)
+{
+	if (number.Sign() < 0)
+	{
+		number._sign = 1;
+	}
+	return number;
+}
+
+BigInteger BigInteger::GreatestCommonDivisor(BigInteger numerator, BigInteger denominator)
+{
+	numerator = BigInteger::Abs(numerator);
+	denominator = BigInteger::Abs(denominator);
+
+	while (numerator != 0 && denominator != 0)
+	{
+		if (numerator > denominator)
+		{
+			numerator %= denominator;
+		}
+		else
+		{
+			denominator %= numerator;
+		}
+	}
+	return numerator+denominator;
 }
 
 // Возводит текущее число в указанную степень.
