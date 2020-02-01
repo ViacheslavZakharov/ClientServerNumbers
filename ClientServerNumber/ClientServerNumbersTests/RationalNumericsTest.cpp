@@ -26,7 +26,6 @@ namespace ClientServerNumbersTests
 		TEST_METHOD(Constructor_NotParameters_ReturnSameResult)
 		{
 			RationalNumerics r1 = RationalNumerics();
-			//Assert::AreEqual(r1.Numerator == 0, true);
 			Assert::AreEqual(r1.Sign(), 0);
 			Assert::AreEqual(r1 == RationalNumerics::Zero(), true);
 		}

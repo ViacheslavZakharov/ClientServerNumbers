@@ -93,7 +93,7 @@ RationalNumerics RationalNumerics::GetFractionPart()
 	return RationalNumerics(BigInteger::Remainder(_numerator, _denominator), _denominator);
 }
 
-// ˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜.
+// Ð¡Ð¾ÐºÑ€Ð°Ñ‰Ð°ÐµÑ‚ Ð´Ñ€Ð¾Ð±ÑŒ.
 void RationalNumerics::SimplifyFraction()
 {
 	if (_numerator == BigInteger::Zero())

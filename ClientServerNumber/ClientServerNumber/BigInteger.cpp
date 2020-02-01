@@ -2,13 +2,13 @@
 
 
 
-// Создает длинное целое положительное число со значением 0.
+// РЎРѕР·РґР°РµС‚ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ С‡РёСЃР»Рѕ СЃРѕ Р·РЅР°С‡РµРЅРёРµРј 0.
 BigInteger::BigInteger()
 {
 	this->_sign = 0;
 }
 
-// Создает длинное целое число из строки.
+// РЎРѕР·РґР°РµС‚ РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ РёР· СЃС‚СЂРѕРєРё.
 BigInteger::BigInteger(string str)
 {
 	if (str.length() == 0)
@@ -17,7 +17,7 @@ BigInteger::BigInteger(string str)
 	}
 	else
 	{
-		// Если первый элемент минус, то выставляем флаг, что число отрицательное.
+		// Р•СЃР»Рё РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚ РјРёРЅСѓСЃ, С‚Рѕ РІС‹СЃС‚Р°РІР»СЏРµРј С„Р»Р°Рі, С‡С‚Рѕ С‡РёСЃР»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ.
 		if (str[0] == '-')
 		{
 			str = str.substr(1);
@@ -32,10 +32,10 @@ BigInteger::BigInteger(string str)
 			this->_sign = 1;
 		}
 
-		// Функция push_back для вектора вставляет элемент в конец.
-		// Функция atoi позволяет преобразовать строку в число (в случае, если преобразование не удается, то возвращает 0).
+		// Р¤СѓРЅРєС†РёСЏ push_back РґР»СЏ РІРµРєС‚РѕСЂР° РІСЃС‚Р°РІР»СЏРµС‚ СЌР»РµРјРµРЅС‚ РІ РєРѕРЅРµС†.
+		// Р¤СѓРЅРєС†РёСЏ atoi РїРѕР·РІРѕР»СЏРµС‚ РїСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РІ С‡РёСЃР»Рѕ (РІ СЃР»СѓС‡Р°Рµ, РµСЃР»Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РЅРµ СѓРґР°РµС‚СЃСЏ, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµС‚ 0).
 		for (long long i = str.length(); i > 0; i -= COUNT_DIGITS_IN_ONE_ELEMENT) {
-			// Если осталось символов меньше, чем заданное количество цифр в одном элементе массива.
+			// Р•СЃР»Рё РѕСЃС‚Р°Р»РѕСЃСЊ СЃРёРјРІРѕР»РѕРІ РјРµРЅСЊС€Рµ, С‡РµРј Р·Р°РґР°РЅРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ С†РёС„СЂ РІ РѕРґРЅРѕРј СЌР»РµРјРµРЅС‚Рµ РјР°СЃСЃРёРІР°.
 			if (i < COUNT_DIGITS_IN_ONE_ELEMENT)
 				this->_digits.push_back(atoi(str.substr(0, i).c_str()));
 			else
@@ -46,17 +46,17 @@ BigInteger::BigInteger(string str)
 	}
 }
 
-// Удаляет ведущие нули, т.е. нули в начале числа.
+// РЈРґР°Р»СЏРµС‚ РІРµРґСѓС‰РёРµ РЅСѓР»Рё, С‚.Рµ. РЅСѓР»Рё РІ РЅР°С‡Р°Р»Рµ С‡РёСЃР»Р°.
 void BigInteger::RemoveLeadingZeros()
 {
-	// Функция back для вектора возвращает ссылку на последний элемент.
+	// Р¤СѓРЅРєС†РёСЏ back РґР»СЏ РІРµРєС‚РѕСЂР° РІРѕР·РІСЂР°С‰Р°РµС‚ СЃСЃС‹Р»РєСѓ РЅР° РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚.
 	while (this->_digits.size() > 1 && this->_digits.back() == 0)
 	{
 		this->_digits.pop_back();
 	}
 }
 
-// Печатает число в поток вывода.
+// РџРµС‡Р°С‚Р°РµС‚ С‡РёСЃР»Рѕ РІ РїРѕС‚РѕРє РІС‹РІРѕРґР°.
 ostream& operator <<(ostream& os, const BigInteger& bi)
 {
 	if (bi._digits.empty())
@@ -70,11 +70,11 @@ ostream& operator <<(ostream& os, const BigInteger& bi)
 		}
 		os << bi._digits.back();
 
-		// Функция fill необходима для того, чтобы цифры печатались без разрывов.
+		// Р¤СѓРЅРєС†РёСЏ fill РЅРµРѕР±С…РѕРґРёРјР° РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ С†РёС„СЂС‹ РїРµС‡Р°С‚Р°Р»РёСЃСЊ Р±РµР· СЂР°Р·СЂС‹РІРѕРІ.
 		char old_fill = os.fill('0');
 		for (long long i = static_cast<long long>(bi._digits.size()) - 2; i >= 0; --i)
 		{
-			// Функция setw устанавливает ширину поля, использующуюся для операции вывода.
+			// Р¤СѓРЅРєС†РёСЏ setw СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С€РёСЂРёРЅСѓ РїРѕР»СЏ, РёСЃРїРѕР»СЊР·СѓСЋС‰СѓСЋСЃСЏ РґР»СЏ РѕРїРµСЂР°С†РёРё РІС‹РІРѕРґР°.
 			os << setw(bi.COUNT_DIGITS_IN_ONE_ELEMENT) << bi._digits[i];
 		}
 		os.fill(old_fill);
@@ -83,18 +83,18 @@ ostream& operator <<(ostream& os, const BigInteger& bi)
 	return os;
 }
 
-// Сравнивает два числа на равенство.
+// РЎСЂР°РІРЅРёРІР°РµС‚ РґРІР° С‡РёСЃР»Р° РЅР° СЂР°РІРµРЅСЃС‚РІРѕ.
 bool operator ==(const BigInteger& left, const BigInteger& right) {
-	// Числа разных знаков точно не равны.
+	// Р§РёСЃР»Р° СЂР°Р·РЅС‹С… Р·РЅР°РєРѕРІ С‚РѕС‡РЅРѕ РЅРµ СЂР°РІРЅС‹.
 	if (left._sign != right._sign)
 	{
 		return false;
 	}
-	// Если левое равно нулю.
+	// Р•СЃР»Рё Р»РµРІРѕРµ СЂР°РІРЅРѕ РЅСѓР»СЋ.
 	if (left._digits.empty())
 	{
-		// Т.к.нулевое число представляется как пустой вектор и как первое число вектора, равное нулю.
-		// Если второе число тоже ноль, то числа равны.
+		// Рў.Рє.РЅСѓР»РµРІРѕРµ С‡РёСЃР»Рѕ РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚СЃСЏ РєР°Рє РїСѓСЃС‚РѕР№ РІРµРєС‚РѕСЂ Рё РєР°Рє РїРµСЂРІРѕРµ С‡РёСЃР»Рѕ РІРµРєС‚РѕСЂР°, СЂР°РІРЅРѕРµ РЅСѓР»СЋ.
+		// Р•СЃР»Рё РІС‚РѕСЂРѕРµ С‡РёСЃР»Рѕ С‚РѕР¶Рµ РЅРѕР»СЊ, С‚Рѕ С‡РёСЃР»Р° СЂР°РІРЅС‹.
 		if (right._digits.empty() || (right._digits.size() == 1 && right._digits[0] == 0))
 		{
 			return true;
@@ -104,7 +104,7 @@ bool operator ==(const BigInteger& left, const BigInteger& right) {
 			return false;
 		}
 	}
-	// Аналогичная проверка, если левый элемент является нулевым.
+	// РђРЅР°Р»РѕРіРёС‡РЅР°СЏ РїСЂРѕРІРµСЂРєР°, РµСЃР»Рё Р»РµРІС‹Р№ СЌР»РµРјРµРЅС‚ СЏРІР»СЏРµС‚СЃСЏ РЅСѓР»РµРІС‹Рј.
 	if (right._digits.empty()) {
 		if (left._digits.size() == 1 && left._digits[0] == 0)
 		{
@@ -115,12 +115,12 @@ bool operator ==(const BigInteger& left, const BigInteger& right) {
 			return false;
 		}
 	}
-	// Если размеры не совпадают.
+	// Р•СЃР»Рё СЂР°Р·РјРµСЂС‹ РЅРµ СЃРѕРІРїР°РґР°СЋС‚.
 	if (left._digits.size() != right._digits.size())
 	{
 		return false;
 	}
-	// Проверяем каждую цифру.
+	// РџСЂРѕРІРµСЂСЏРµРј РєР°Р¶РґСѓСЋ С†РёС„СЂСѓ.
 	for (size_t i = 0; i < left._digits.size(); ++i)
 	{
 		if (left._digits[i] != right._digits[i])
@@ -132,12 +132,12 @@ bool operator ==(const BigInteger& left, const BigInteger& right) {
 	return true;
 }
 
-// Возвращает копию переданного числа (унарный плюс).
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРїРёСЋ РїРµСЂРµРґР°РЅРЅРѕРіРѕ С‡РёСЃР»Р° (СѓРЅР°СЂРЅС‹Р№ РїР»СЋСЃ).
 const BigInteger BigInteger::operator +() const {
 	return BigInteger(*this);
 }
 
-// Возвращает переданное число с противоположным знаком (унарный минус).
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РїРµСЂРµРґР°РЅРЅРѕРµ С‡РёСЃР»Рѕ СЃ РїСЂРѕС‚РёРІРѕРїРѕР»РѕР¶РЅС‹Рј Р·РЅР°РєРѕРј (СѓРЅР°СЂРЅС‹Р№ РјРёРЅСѓСЃ).
 const BigInteger BigInteger::operator -() const
 {
 	BigInteger copy(*this);
@@ -145,7 +145,7 @@ const BigInteger BigInteger::operator -() const
 	return copy;
 }
 
-// Проверяет, является ли левый операнд меньше правого.
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р»РµРІС‹Р№ РѕРїРµСЂР°РЅРґ РјРµРЅСЊС€Рµ РїСЂР°РІРѕРіРѕ.
 bool operator <(const BigInteger& left, const BigInteger& right)
 {
 	if (left == right)
@@ -187,31 +187,31 @@ bool operator <(const BigInteger& left, const BigInteger& right)
 	}
 }
 
-// Cравнивает два числа на неравенство.
+// CСЂР°РІРЅРёРІР°РµС‚ РґРІР° С‡РёСЃР»Р° РЅР° РЅРµСЂР°РІРµРЅСЃС‚РІРѕ.
 bool operator !=(const BigInteger& left, const BigInteger& right)
 {
 	return !(left == right);
 }
 
-// Проверяет, является ли левый операнд меньше либо равен правого.
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р»РµРІС‹Р№ РѕРїРµСЂР°РЅРґ РјРµРЅСЊС€Рµ Р»РёР±Рѕ СЂР°РІРµРЅ РїСЂР°РІРѕРіРѕ.
 bool operator <=(const BigInteger& left, const BigInteger& right)
 {
 	return (left < right || left == right);
 }
 
-// Проверяет, является ли левый операнд больше правого.
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р»РµРІС‹Р№ РѕРїРµСЂР°РЅРґ Р±РѕР»СЊС€Рµ РїСЂР°РІРѕРіРѕ.
 bool operator >(const BigInteger& left, const BigInteger& right)
 {
 	return !(left <= right);
 }
 
-// Проверяет, является ли левый операнд больше либо равен правого.
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё Р»РµРІС‹Р№ РѕРїРµСЂР°РЅРґ Р±РѕР»СЊС€Рµ Р»РёР±Рѕ СЂР°РІРµРЅ РїСЂР°РІРѕРіРѕ.
 bool operator >=(const BigInteger& left, const BigInteger& right)
 {
 	return !(left < right);
 }
 
-// Cкладывает два числа
+// CРєР»Р°РґС‹РІР°РµС‚ РґРІР° С‡РёСЃР»Р°
 const BigInteger operator +(BigInteger left, const BigInteger& right)
 {
 	if (left._sign == -1)
@@ -259,19 +259,19 @@ const BigInteger operator +(BigInteger left, const BigInteger& right)
 	return left;
 }
 
-// Прибавляет к текущему числу новое.
+// РџСЂРёР±Р°РІР»СЏРµС‚ Рє С‚РµРєСѓС‰РµРјСѓ С‡РёСЃР»Сѓ РЅРѕРІРѕРµ.
 BigInteger& BigInteger::operator +=(const BigInteger& value)
 {
 	return *this = (*this + value);
 }
 
-// Префиксный инкремент.
+// РџСЂРµС„РёРєСЃРЅС‹Р№ РёРЅРєСЂРµРјРµРЅС‚.
 const BigInteger BigInteger::operator++()
 {
 	return (*this += 1);
 }
 
-// Преобразует число к строке.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ С‡РёСЃР»Рѕ Рє СЃС‚СЂРѕРєРµ.
 BigInteger::operator string() const
 {
 	stringstream ss;
@@ -279,7 +279,7 @@ BigInteger::operator string() const
 	return ss.str();
 }
 
-// Преобразует signed char к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ signed char Рє BigInteger.
 BigInteger::BigInteger(signed char c)
 {
 	if (c < 0)
@@ -298,7 +298,7 @@ BigInteger::BigInteger(signed char c)
 	this->_digits.push_back(abs(c));
 }
 
-// Преобразует unsigned char к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ unsigned char Рє BigInteger.
 BigInteger::BigInteger(unsigned char c)
 {
 	if (c == 0)
@@ -312,7 +312,7 @@ BigInteger::BigInteger(unsigned char c)
 	this->_digits.push_back(c);
 }
 
-// Преобразует signed short к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ signed short Рє BigInteger.
 BigInteger::BigInteger(signed short s)
 {
 	if (s < 0)
@@ -331,7 +331,7 @@ BigInteger::BigInteger(signed short s)
 	this->_digits.push_back(abs(s));
 }
 
-// Преобразует unsigned short к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ unsigned short Рє BigInteger.
 BigInteger::BigInteger(unsigned short s)
 {
 	if (s == 0)
@@ -345,7 +345,7 @@ BigInteger::BigInteger(unsigned short s)
 	this->_digits.push_back(s);
 }
 
-// Преобразует signed int к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ signed int Рє BigInteger.
 BigInteger::BigInteger(signed int i) {
 	if (i < 0)
 	{
@@ -367,7 +367,7 @@ BigInteger::BigInteger(signed int i) {
 	}
 }
 
-// Преобразует unsigned int к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ unsigned int Рє BigInteger.
 BigInteger::BigInteger(unsigned int i)
 {
 	if (i == 0)
@@ -386,7 +386,7 @@ BigInteger::BigInteger(unsigned int i)
 	}
 }
 
-// Преобразует signed long к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ signed long Рє BigInteger.
 BigInteger::BigInteger(signed long l)
 {
 	if (l < 0)
@@ -409,7 +409,7 @@ BigInteger::BigInteger(signed long l)
 	}
 }
 
-// Преобразует unsigned long к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ unsigned long Рє BigInteger.
 BigInteger::BigInteger(unsigned long l)
 {
 	if (l == 0)
@@ -428,7 +428,7 @@ BigInteger::BigInteger(unsigned long l)
 	}
 }
 
-// преобразует signed long long к BigInteger.
+// РїСЂРµРѕР±СЂР°Р·СѓРµС‚ signed long long Рє BigInteger.
 BigInteger::BigInteger(signed long long l)
 {
 	if (l < 0)
@@ -450,7 +450,7 @@ BigInteger::BigInteger(signed long long l)
 	} while (l != 0);
 }
 
-// Преобразует unsigned long long к BigInteger.
+// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ unsigned long long Рє BigInteger.
 BigInteger::BigInteger(unsigned long long l)
 {
 	if (l == 0)
@@ -468,27 +468,27 @@ BigInteger::BigInteger(unsigned long long l)
 	} while (l != 0);
 }
 
-// Постфиксный инкремент.
+// РџРѕСЃС‚С„РёРєСЃРЅС‹Р№ РёРЅРєСЂРµРјРµРЅС‚.
 const BigInteger BigInteger::operator ++(int)
 {
 	*this += 1;
 	return *this - 1;
 }
 
-// Префиксный декремент.
+// РџСЂРµС„РёРєСЃРЅС‹Р№ РґРµРєСЂРµРјРµРЅС‚.
 const BigInteger BigInteger::operator --()
 {
 	return *this -= 1;
 }
 
-// Постфиксный декремент.
+// РџРѕСЃС‚С„РёРєСЃРЅС‹Р№ РґРµРєСЂРµРјРµРЅС‚.
 const BigInteger BigInteger::operator --(int)
 {
 	*this -= 1;
 	return *this + 1;
 }
 
-// Вычитает два числа.
+// Р’С‹С‡РёС‚Р°РµС‚ РґРІР° С‡РёСЃР»Р°.
 const BigInteger operator -(BigInteger left, const BigInteger& right)
 {
 	if (right._sign == -1)
@@ -531,13 +531,13 @@ const BigInteger operator -(BigInteger left, const BigInteger& right)
 	return left;
 }
 
-// Вычитает из текущего числа новое.
+// Р’С‹С‡РёС‚Р°РµС‚ РёР· С‚РµРєСѓС‰РµРіРѕ С‡РёСЃР»Р° РЅРѕРІРѕРµ.
 BigInteger& BigInteger::operator -=(const BigInteger& value)
 {
 	return *this = (*this - value);
 }
 
-// Перемножает два числа.
+// РџРµСЂРµРјРЅРѕР¶Р°РµС‚ РґРІР° С‡РёСЃР»Р°.
 const BigInteger operator *(const BigInteger& left, const BigInteger& right)
 {
 	BigInteger result;
@@ -571,13 +571,13 @@ const BigInteger operator *(const BigInteger& left, const BigInteger& right)
 	return result;
 }
 
-// Домножает текущее число на указанное.
+// Р”РѕРјРЅРѕР¶Р°РµС‚ С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ РЅР° СѓРєР°Р·Р°РЅРЅРѕРµ.
 BigInteger& BigInteger::operator *=(const BigInteger& value)
 {
 	return *this = (*this * value);
 }
 
-// Сдвигает все разряды на 1 вправо (домножает на BASE).
+// РЎРґРІРёРіР°РµС‚ РІСЃРµ СЂР°Р·СЂСЏРґС‹ РЅР° 1 РІРїСЂР°РІРѕ (РґРѕРјРЅРѕР¶Р°РµС‚ РЅР° BASE).
 void BigInteger::_shift_right()
 {
 	if (this->_digits.size() == 0)
@@ -593,7 +593,7 @@ void BigInteger::_shift_right()
 	this->_digits[0] = 0;
 }
 
-// Делит два числа.
+// Р”РµР»РёС‚ РґРІР° С‡РёСЃР»Р°.
 const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 {
 	if (right == 0)
@@ -603,12 +603,14 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 	BigInteger b = right;
 	b._sign = 1;
 	BigInteger result, current;
+	current._sign = 1;
 	result._digits.resize(left._digits.size());
 	for (long long i = static_cast<long long>(left._digits.size()) - 1; i >= 0; --i)
 	{
 		current._shift_right();
 		current._digits[0] = left._digits[i];
-		current._sign = left._sign;
+		current._sign = 1;
+		//current._sign = left._sign;
 		current.RemoveLeadingZeros();
 		int x = 0, l = 0, r = BigInteger::BASE;
 		while (l <= r)
@@ -643,44 +645,39 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 	return result;
 }
 
-// Делит текущее число на указанное.
+// Р”РµР»РёС‚ С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ РЅР° СѓРєР°Р·Р°РЅРЅРѕРµ.
 BigInteger& BigInteger::operator /=(const BigInteger& value)
 {
 	return *this = (*this / value);
 }
 
-// Возвращает остаток от деления двух чисел.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕСЃС‚Р°С‚РѕРє РѕС‚ РґРµР»РµРЅРёСЏ РґРІСѓС… С‡РёСЃРµР».
 const BigInteger operator %(const BigInteger& left, const BigInteger& right)
 {
-	BigInteger result = left - (left / right) * right;
-	if (result._sign == -1)
-	{
-		result += right;
-	}
+	BigInteger l = BigInteger::Abs(left);
+	BigInteger r = BigInteger::Abs(right);
+	BigInteger result = l - (l / r) * r;
+
 	if (result._digits.size() == 1 && result._digits[0] == 0)
 	{
 		result._sign = 0;
 	}
-	else if (result > 0)
-	{
-		result._sign = 1;
-	}
 	else
 	{
-		result._sign = -1;
+		result._sign = 1;
 	}
 
 	return result;
 }
 
-// Присваивает текущему числу остаток от деления на другое число.
+// РџСЂРёСЃРІР°РёРІР°РµС‚ С‚РµРєСѓС‰РµРјСѓ С‡РёСЃР»Сѓ РѕСЃС‚Р°С‚РѕРє РѕС‚ РґРµР»РµРЅРёСЏ РЅР° РґСЂСѓРіРѕРµ С‡РёСЃР»Рѕ.
 BigInteger& BigInteger::operator %=(const BigInteger& value)
 {
 	return *this = (*this % value);
 }
 
-// Проверяет, является ли текущее число нечетным.
-bool BigInteger::odd() const
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ РЅРµС‡РµС‚РЅС‹Рј.
+bool BigInteger::Odd() const
 {
 	if (this->_digits.size() == 0)
 	{
@@ -689,10 +686,10 @@ bool BigInteger::odd() const
 	return this->_digits[0] & 1;
 }
 
-// Проверяет, является ли текущее число четным.
-bool BigInteger::even() const
+// РџСЂРѕРІРµСЂСЏРµС‚, СЏРІР»СЏРµС‚СЃСЏ Р»Рё С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ С‡РµС‚РЅС‹Рј.
+bool BigInteger::Even() const
 {
-	return !this->odd();
+	return !this->Odd();
 }
 
 int BigInteger::Sign()
@@ -738,13 +735,14 @@ BigInteger BigInteger::Remainder(BigInteger numerator, BigInteger denominator)
 	return numerator % denominator;
 }
 
-BigInteger BigInteger::Abs(BigInteger number)
+BigInteger BigInteger::Abs(const BigInteger& number)
 {
-	if (number.Sign() < 0)
+	BigInteger result = number;
+	if (result.Sign() < 0)
 	{
-		number._sign = 1;
+		result._sign = 1;
 	}
-	return number;
+	return result;
 }
 
 BigInteger BigInteger::GreatestCommonDivisor(BigInteger numerator, BigInteger denominator)
@@ -766,13 +764,14 @@ BigInteger BigInteger::GreatestCommonDivisor(BigInteger numerator, BigInteger de
 	return numerator+denominator;
 }
 
-// Возводит текущее число в указанную степень.
-const BigInteger BigInteger::pow(BigInteger n) const
+// Р’РѕР·РІРѕРґРёС‚ С‚РµРєСѓС‰РµРµ С‡РёСЃР»Рѕ РІ РїРѕР»РѕР¶РёС‚РµР»СЊРЅСѓСЋ С†РµР»СѓСЋ СѓРєР°Р·Р°РЅРЅСѓСЋ СЃС‚РµРїРµРЅСЊ.
+const BigInteger BigInteger::Pow(BigInteger n) const
 {
 	BigInteger a(*this), result(1);
+	n = BigInteger::Abs(n);
 	while (n != 0)
 	{
-		if (n.odd())
+		if (n.Odd())
 		{
 			result *= a;
 		}

@@ -10,16 +10,16 @@ public:
 
 	friend bool operator ==(const ServerNumber&, const ServerNumber&);
 private:
-	// Мантисса. (значимая часть числа)
+	// РњР°РЅС‚РёСЃСЃР°. (Р·РЅР°С‡РёРјР°СЏ С‡Р°СЃС‚СЊ С‡РёСЃР»Р°)
 	BigInteger _significand;
 
-	// Показатель.
+	// РџРѕРєР°Р·Р°С‚РµР»СЊ.
 	int _exponent;
-	// Рациональное число.
+	// Р Р°С†РёРѕРЅР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ.
 	RationalNumerics _rational;
 
 	const int ACCURACY_DEFAULT = 16;
 
-	// Преобразовать к эспоненциалной записи.
+	// РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ Рє СЌСЃРїРѕРЅРµРЅС†РёР°Р»РЅРѕР№ Р·Р°РїРёСЃРё.
 	void ReformToExponentialNotation(BigInteger numerator, BigInteger denominator, int accuracy);
 };

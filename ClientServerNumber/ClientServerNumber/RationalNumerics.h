@@ -6,39 +6,39 @@ class RationalNumerics
 public:
 
 	RationalNumerics();
-	// Конструктор, принимающий числитель и знаменатель.
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ, РїСЂРёРЅРёРјР°СЋС‰РёР№ С‡РёСЃР»РёС‚РµР»СЊ Рё Р·РЅР°РјРµРЅР°С‚РµР»СЊ.
 	RationalNumerics(BigInteger numerator, BigInteger denominator);
 
-	// Конструктор, принимающий числитель и знаменатель в виде строки.
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ, РїСЂРёРЅРёРјР°СЋС‰РёР№ С‡РёСЃР»РёС‚РµР»СЊ Рё Р·РЅР°РјРµРЅР°С‚РµР»СЊ РІ РІРёРґРµ СЃС‚СЂРѕРєРё.
 	RationalNumerics(string numerator, string denominator);
 
-	// Конструктор принимающий только целое число, знаменатель = 1.
+	// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїСЂРёРЅРёРјР°СЋС‰РёР№ С‚РѕР»СЊРєРѕ С†РµР»РѕРµ С‡РёСЃР»Рѕ, Р·РЅР°РјРµРЅР°С‚РµР»СЊ = 1.
 	RationalNumerics(BigInteger numerator);
 
-	// Ноль.
+	// РќРѕР»СЊ.
 	static RationalNumerics Zero();
 
-	// Один.
+	// РћРґРёРЅ.
 	static RationalNumerics One();
 
-	// Числитель.
+	// Р§РёСЃР»РёС‚РµР»СЊ.
 	BigInteger Numerator();
 
-	// Знаменатель.
+	// Р—РЅР°РјРµРЅР°С‚РµР»СЊ.
 	BigInteger Denominator();
 
-	// Знак.
+	// Р—РЅР°Рє.
 	int Sign();
 
 	string ToString();
 
-	// Получить целую часть.
+	// РџРѕР»СѓС‡РёС‚СЊ С†РµР»СѓСЋ С‡Р°СЃС‚СЊ.
 	BigInteger GetWholePart();
 
-	// Получить дробную часть.
+	// РџРѕР»СѓС‡РёС‚СЊ РґСЂРѕР±РЅСѓСЋ С‡Р°СЃС‚СЊ.
 	RationalNumerics GetFractionPart();
 
-	// Сокращает дробь.
+	// РЎРѕРєСЂР°С‰Р°РµС‚ РґСЂРѕР±СЊ.
 	void SimplifyFraction();
 
 	const RationalNumerics operator +() const;
