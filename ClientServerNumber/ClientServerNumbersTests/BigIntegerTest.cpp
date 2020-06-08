@@ -215,7 +215,7 @@ namespace ClientServerNumbersTests
 
 #pragma endregion Constructor.Tests
 
-#pragma region ComparisonOperator.Tests
+#pragma region ComparisonOperators.Tests
 
 		TEST_METHOD(EqualsEqualsOperator_DifferentNumber_CorrectResult)
 		{
@@ -418,7 +418,7 @@ namespace ClientServerNumbersTests
 			Assert::AreEqual(b4 != b4, false);
 		}
 
-#pragma endregion ComparisonOperator.Tests
+#pragma endregion ComparisonOperators.Tests
 
 #pragma region ArithmeticOperators.Tests
 
@@ -535,6 +535,21 @@ namespace ClientServerNumbersTests
 			BigInteger b9(DIVIDEND_STRING_5_CASE);
 			BigInteger b10(DEVISOR_STRING_5_CASE);
 			Assert::AreEqual(b9 / b10 == BigInteger(DEVIDE_RESULT_STRING_5_CASE), true);
+		}
+
+		TEST_METHOD(DivideOperator_DivideByZero_Exception)
+		{
+			BigInteger b1(DIVIDEND_STRING_1_CASE);
+			try 
+			{
+				b1 / BigInteger();
+				Assert::Fail();
+			}
+			catch (string actualExceptionString)
+			{
+				string expectedExceptionString = "Divide by zerro exception";
+				Assert::AreEqual(actualExceptionString, expectedExceptionString);
+			}
 		}
 
 		TEST_METHOD(RemindOperator_DifferentNumber_CorrectResult)

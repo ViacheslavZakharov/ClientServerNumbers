@@ -11,7 +11,8 @@ RationalNumerics::RationalNumerics(BigInteger numerator, BigInteger denominator)
 {
 	if (denominator.Sign() == 0)
 	{
-		throw "Divide by zerro exception";
+		string exceptionMessage = "Divide by zerro exception";
+		throw (exceptionMessage);
 	}
 	else if (numerator.Sign() == 0)
 	{
@@ -44,6 +45,14 @@ RationalNumerics::RationalNumerics(BigInteger numerator)
 	_numerator = numerator;
 	_denominator = BigInteger::One();
 	_sign = _numerator.Sign();
+}
+
+RationalNumerics::RationalNumerics(int numerator) : RationalNumerics(BigInteger(numerator))
+{
+}
+
+RationalNumerics::RationalNumerics(string numerator) : RationalNumerics(BigInteger(numerator))
+{
 }
 
 RationalNumerics RationalNumerics::_zero = RationalNumerics(BigInteger::Zero());
@@ -85,7 +94,8 @@ string RationalNumerics::ToString()
 
 BigInteger RationalNumerics::GetWholePart()
 {
-	return BigInteger::Divide(_numerator, _denominator);
+	BigInteger wholePart = BigInteger::Divide(_numerator, _denominator);
+	return wholePart;
 }
 
 RationalNumerics RationalNumerics::GetFractionPart()
@@ -132,22 +142,28 @@ const RationalNumerics RationalNumerics::operator--()
 //     a/b = c/d, iff ad = bc
 bool operator ==(const RationalNumerics& left, const RationalNumerics& right)
 {
-	return left._numerator * right._denominator == right._numerator * left._denominator;
+	return left._sign == right._sign &&
+		left._numerator * right._denominator == right._numerator * left._denominator;
 }
 
 bool operator<(const RationalNumerics& left, const RationalNumerics& right)
 {
-	return left._numerator * right._denominator < right._numerator * left._denominator;
+	return (left._sign == right._sign &&
+		left._numerator * right._denominator < right._numerator * left._denominator) ||
+		left._sign < right._sign;
 }
 
 bool operator !=(const RationalNumerics& left, const RationalNumerics& right)
 {
-	return left._numerator * right._denominator != right._numerator * left._denominator;
+	return left._sign != right._sign &&
+		left._numerator * right._denominator != right._numerator * left._denominator;
 }
 
 bool operator>(const RationalNumerics& left, const RationalNumerics& right)
 {
-	return left._numerator * right._denominator > right._numerator * left._denominator;
+	return (left._sign == right._sign &&
+		left._numerator * right._denominator > right._numerator * left._denominator) ||
+		left._sign > right._sign;
 }
 
 bool operator<=(const RationalNumerics& left, const RationalNumerics& right)
@@ -206,7 +222,14 @@ ostream& operator<<(ostream& os, const RationalNumerics& rn)
 		{
 			os << '-';
 		}
-		os << rn._numerator << '/' << rn._denominator;
+		if (rn._denominator == 1)
+		{
+			os << rn._numerator;
+		}
+		else
+		{
+			os << rn._numerator << '/' << rn._denominator;
+		}
 	}
 	return os;
 }

@@ -79,6 +79,9 @@ public:
 
 	string ToString();
 
+	// Добавляет к началу числа заданное количество нулей.
+	void SetZerrosInStart(int countZerro);
+
 	// Возвращает число 1.
 	static BigInteger One();
 
@@ -99,6 +102,9 @@ public:
 
 	// Получает наибольший общий делитель.
 	static BigInteger GreatestCommonDivisor(BigInteger numerator, BigInteger denominator);
+
+	// Обрезает число по математическим правилам округления до переданного количества цифр.
+	static BigInteger CutMathematic(BigInteger number, int countDigits);
 private:
 	// внутреннее хранилище числа
 	vector<int> _digits;
@@ -109,11 +115,13 @@ private:
 	 * 1 имеет положительное значение.
 	 */
 	int _sign;
-	//bool _isNegative;
+	
+	// Количество нулей вначале числа
+	int _countZerroInStart = 0;
 
 	// Удаляет ведущие нули, т.е. нули в начале числа.
 	void RemoveLeadingZeros();
-	void _shift_right();
+	void _shiftRight();
 
 	static BigInteger _one;
 
@@ -121,6 +129,3 @@ private:
 
 	static BigInteger _minusOne;
 };
-
-// Создает длинное целое положительное число со значением 0.
-//BigInteger BigInteger :: _one = BigInteger("1");

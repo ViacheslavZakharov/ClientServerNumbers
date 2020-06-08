@@ -15,6 +15,9 @@ public:
 	// Конструктор принимающий только целое число, знаменатель = 1.
 	RationalNumerics(BigInteger numerator);
 
+	RationalNumerics(int numerator);
+	RationalNumerics(string numerator);
+
 	// Ноль.
 	static RationalNumerics Zero();
 
@@ -37,9 +40,6 @@ public:
 
 	// Получить дробную часть.
 	RationalNumerics GetFractionPart();
-
-	// Сокращает дробь.
-	void SimplifyFraction();
 
 	const RationalNumerics operator +() const;
 	const RationalNumerics operator -() const;
@@ -77,5 +77,8 @@ private:
 	BigInteger _denominator;
 
 	int _sign;
+
+	// Сокращает дробь.
+	void SimplifyFraction();
 };
 

@@ -1,7 +1,5 @@
 #include "BigInteger.h"
 
-
-
 // Создает длинное целое положительное число со значением 0.
 BigInteger::BigInteger()
 {
@@ -68,6 +66,16 @@ ostream& operator <<(ostream& os, const BigInteger& bi)
 		{
 			os << '-';
 		}
+
+		// Выведем, если необходимо нули вначале числа.
+		if (bi._countZerroInStart != 0)
+		{
+			for (int i = 0; i < bi._countZerroInStart; i++)
+			{
+				os << 0;
+			}
+		}
+
 		os << bi._digits.back();
 
 		// Функция fill необходима для того, чтобы цифры печатались без разрывов.
@@ -578,7 +586,7 @@ BigInteger& BigInteger::operator *=(const BigInteger& value)
 }
 
 // Сдвигает все разряды на 1 вправо (домножает на BASE).
-void BigInteger::_shift_right()
+void BigInteger::_shiftRight()
 {
 	if (this->_digits.size() == 0)
 	{
@@ -598,7 +606,8 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 {
 	if (right == 0)
 	{
-		throw "Divide by zerro exception";/*BigInteger::DivideByZeroException();*/
+		string exceptionMessage = "Divide by zerro exception";
+		throw (exceptionMessage);
 	}
 	BigInteger b = right;
 	b._sign = 1;
@@ -607,10 +616,9 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 	result._digits.resize(left._digits.size());
 	for (long long i = static_cast<long long>(left._digits.size()) - 1; i >= 0; --i)
 	{
-		current._shift_right();
+		current._shiftRight();
 		current._digits[0] = left._digits[i];
 		current._sign = 1;
-		//current._sign = left._sign;
 		current.RemoveLeadingZeros();
 		int x = 0, l = 0, r = BigInteger::BASE;
 		while (l <= r)
@@ -629,7 +637,7 @@ const BigInteger operator /(const BigInteger& left, const BigInteger& right)
 		current = current - b * x;
 	}
 
-	if (left._digits.size() == 1 && left._digits[0] == 0)
+	if (result._digits.size() == 1 && result._digits[0] == 0)
 	{
 		result._sign = 0;
 	}
@@ -704,6 +712,11 @@ string BigInteger::ToString()
 	return ss.str();
 }
 
+void BigInteger::SetZerrosInStart(int countZerro)
+{
+	_countZerroInStart = countZerro;
+}
+
 BigInteger BigInteger::_one = BigInteger("1");
 
 BigInteger BigInteger::One()
@@ -762,6 +775,31 @@ BigInteger BigInteger::GreatestCommonDivisor(BigInteger numerator, BigInteger de
 		}
 	}
 	return numerator+denominator;
+}
+
+// Производит обрезание числа по законам математики.
+// Не изменяет переданное число.
+// TODO: Сделать тесты на метод.
+BigInteger BigInteger::CutMathematic(BigInteger number, int countDigits)
+{
+	string numberString = number.ToString();
+	if (numberString.size() <= countDigits)
+	{
+		return number;
+	}
+	string resultNumberString = numberString.substr(0, countDigits+1);
+	int lastDigit = atoi(resultNumberString.substr(resultNumberString.size() - 1, 1).c_str());
+	// Обрезаем последнюю цифру.
+	resultNumberString = resultNumberString.substr(0, resultNumberString.size() - 1);
+	if (lastDigit >= 5)
+	{
+		// Если больше 5 последняя цифра, то к результату добавляем 1.
+		return BigInteger(resultNumberString) + 1;
+	}
+	else
+	{
+		return BigInteger(resultNumberString);
+	}
 }
 
 // Возводит текущее число в положительную целую указанную степень.
