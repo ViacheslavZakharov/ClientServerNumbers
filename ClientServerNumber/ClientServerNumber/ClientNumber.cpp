@@ -9,8 +9,7 @@ ClientNumber::ClientNumber(ServerRationalNumber s1, ServerRationalNumber s2, Ope
 	this->_s1 = s1;
 	this->_s2 = s2;
 	_operation = op;
-	auto temp = GetResultOperation(s1, s2, op);
-	_resultOperation = temp;
+	_resultOperation = GetResultOperation(s1, s2, op);
 }
 
 ServerRationalNumber ClientNumber::GetResultOperation(ServerRationalNumber s1,
@@ -33,6 +32,7 @@ ServerRationalNumber ClientNumber::GetResultOperation(ServerRationalNumber s1,
 
 void ClientNumber::IncreaseAccuracyResult(int numberDigits)
 {
+	_resultOperation.IncreaseCurrentAccuracy(numberDigits);
 }
 
 string ClientNumber::ToString()

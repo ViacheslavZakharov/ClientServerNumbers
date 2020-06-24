@@ -11,7 +11,7 @@ ServerRationalNumber::ServerRationalNumber(RationalNumerics rationalNumeric)
 	_significandWholePart = 0;
 	_significandNotWholePart = 0;
 	ReformToExponentialNotation();
-	_currentAccuracy = GetCurrentAccuracy(COUNT_DIGITS_ACCURACY_DEFAULT);
+	_currentAccuracy = SetCurrentAccuracy(COUNT_DIGITS_ACCURACY_DEFAULT);
 }
 
 ServerRationalNumber::ServerRationalNumber(string numerator, string denominator)
@@ -96,7 +96,7 @@ void ServerRationalNumber::ReformToExponentialNotation()
 	_significandNotWholePart.SetZerrosInStart(_countZerroInStart);
 }
 
-BigInteger ServerRationalNumber::GetCurrentAccuracy(int countDigits)
+BigInteger ServerRationalNumber::SetCurrentAccuracy(int countDigits)
 {
 	return 
 		BigInteger::CutMathematic(_significandNotWholePart, countDigits);
@@ -132,7 +132,7 @@ string ServerRationalNumber::ToString()
 void ServerRationalNumber::IncreaseCurrentAccuracy(int numberDigits)
 {
 	int currentNumberDigits = _currentAccuracy.ToString().size();
-	_currentAccuracy = GetCurrentAccuracy(currentNumberDigits + numberDigits);
+	_currentAccuracy = SetCurrentAccuracy(currentNumberDigits + numberDigits);
 }
 
 ServerRationalNumber ServerRationalNumber::operator=(ServerRationalNumber number)

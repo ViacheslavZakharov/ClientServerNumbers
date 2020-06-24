@@ -67,5 +67,5 @@ private:
 	void ReformToExponentialNotation();
 
 	// Получает текущую точность числа до количества переданных чисел.
-	BigInteger GetCurrentAccuracy(int countDigits);
+	BigInteger SetCurrentAccuracy(int countDigits);
 };
