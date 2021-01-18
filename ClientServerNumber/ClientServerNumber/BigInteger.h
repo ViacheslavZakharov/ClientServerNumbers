@@ -26,9 +26,6 @@ class BigInteger {
 	static const int COUNT_DIGITS_IN_ONE_ELEMENT = 9;
 
 public:
-	// класс-исключение, бросаемое при делении на ноль
-	//class DivideByZeroException : public exception {  };
-
 	BigInteger();
 
 	BigInteger(string);
@@ -82,6 +79,9 @@ public:
 	// Добавляет к началу числа заданное количество нулей.
 	void SetZerrosInStart(int countZerro);
 
+	// Получает количество нулей в начале числа.
+	int GetZerroInStart();
+
 	// Возвращает число 1.
 	static BigInteger One();
 
@@ -105,6 +105,9 @@ public:
 
 	// Обрезает число по математическим правилам округления до переданного количества цифр.
 	static BigInteger CutMathematic(BigInteger number, int countDigits);
+
+	// Получает действительное количество символов с нулями.
+	static int GetCountDigits(BigInteger number);
 private:
 	// внутреннее хранилище числа
 	vector<int> _digits;

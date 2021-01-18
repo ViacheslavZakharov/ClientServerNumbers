@@ -32,7 +32,7 @@ ServerRationalNumber ClientNumber::GetResultOperation(ServerRationalNumber s1,
 
 void ClientNumber::IncreaseAccuracyResult(int numberDigits)
 {
-	_resultOperation.IncreaseCurrentAccuracy(numberDigits);
+	//_resultOperation.IncreaseCurrentAccuracy(numberDigits);
 }
 
 string ClientNumber::ToString()

@@ -7,14 +7,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ClientServerNumbersTests
 {
+	// TODO: Переделать тесты
 	TEST_CLASS(ServerRationalNumberTest)
 	{
 	public:
-#pragma region Consts
-
-		//  константы дл¤ тестирования конструктора.
-
-#pragma endregion Consts
 
 #pragma region Constructor.Tests
 
@@ -98,7 +94,7 @@ namespace ClientServerNumbersTests
 		{
 			ServerRationalNumber s1 = ServerRationalNumber("158", "3");
 			Assert::AreEqual(string("5,267 * 10^1"), s1.ToString());
-			s1.IncreaseCurrentAccuracy(1);
+		//	s1.IncreaseCurrentAccuracy(1);
 			Assert::AreEqual(string("5,2667 * 10^1"), s1.ToString());
 		}
 
@@ -106,7 +102,7 @@ namespace ClientServerNumbersTests
 		{
 			ServerRationalNumber s1 = ServerRationalNumber("100000", "39");
 			Assert::AreEqual(string("2,564 * 10^3"), s1.ToString());
-			s1.IncreaseCurrentAccuracy(5);
+		//	s1.IncreaseCurrentAccuracy(5);
 			Assert::AreEqual(string("2,56410256 * 10^3"), s1.ToString());
 		}
 
@@ -185,7 +181,7 @@ namespace ClientServerNumbersTests
 
 			Assert::AreEqual(string("0,298"), result.ToString());
 
-			result.IncreaseCurrentAccuracy(5);
+		//	result.IncreaseCurrentAccuracy(5);
 			Assert::AreEqual(string("0,29824561"), result.ToString());
 		}
 

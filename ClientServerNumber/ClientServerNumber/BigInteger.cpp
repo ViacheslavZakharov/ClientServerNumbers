@@ -717,6 +717,11 @@ void BigInteger::SetZerrosInStart(int countZerro)
 	_countZerroInStart = countZerro;
 }
 
+int BigInteger::GetZerroInStart()
+{
+	return _countZerroInStart;
+}
+
 BigInteger BigInteger::_one = BigInteger("1");
 
 BigInteger BigInteger::One()
@@ -791,15 +796,26 @@ BigInteger BigInteger::CutMathematic(BigInteger number, int countDigits)
 	int lastDigit = atoi(resultNumberString.substr(resultNumberString.size() - 1, 1).c_str());
 	// Обрезаем последнюю цифру.
 	resultNumberString = resultNumberString.substr(0, resultNumberString.size() - 1);
+	BigInteger result = BigInteger(resultNumberString);
+	// Если больше 5 последняя цифра, то к результату добавляем 1.
 	if (lastDigit >= 5)
 	{
-		// Если больше 5 последняя цифра, то к результату добавляем 1.
-		return BigInteger(resultNumberString) + 1;
+		result++;
 	}
-	else
-	{
-		return BigInteger(resultNumberString);
-	}
+	// Если длина числа увеличилась, то количество нулей в начале нужно уменьшить
+	int countZerrosInStart = number.GetZerroInStart();
+	result.SetZerrosInStart(countZerrosInStart);
+	bool needDecreaseZerros = countZerrosInStart > 0 && resultNumberString.length() < result.ToString().length();
+	countZerrosInStart = needDecreaseZerros ? countZerrosInStart - 1 : countZerrosInStart;
+
+	result.SetZerrosInStart(countZerrosInStart);
+
+	return result;
+}
+
+int BigInteger::GetCountDigits(BigInteger number)
+{
+	return number.ToString().length();
 }
 
 // Возводит текущее число в положительную целую указанную степень.
