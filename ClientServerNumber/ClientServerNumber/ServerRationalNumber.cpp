@@ -7,8 +7,8 @@ ServerRationalNumber::ServerRationalNumber() : ServerRationalNumber(RationalNume
 ServerRationalNumber::ServerRationalNumber(RationalNumerics rationalNumeric)
 {
 	_rational = rationalNumeric;
-	_currentAccuracy = ACCURACY_DEFAULT;
 	_exponentialNotation = ExponentialNotation(rationalNumeric, ACCURACY_DEFAULT);
+	_currentAccuracy = _exponentialNotation.GetCurrentAccuracy();
 }
 
 ServerRationalNumber::ServerRationalNumber(string numerator, string denominator)

@@ -9,7 +9,7 @@ public:
 	ExponentialNotation();
 	ExponentialNotation(RationalNumerics rationalNumeric, int accuracy);
 	ExponentialNotation(int sign, int significandWhole, BigInteger significandNotWhole,
-		int exponent, int accuracy);
+		int exponent, int accuracy, int maxCountDigitsNotWholePart);
 
 	// Знак.
 	int Sign();
@@ -29,17 +29,13 @@ public:
 	// Преобразовывает к эспоненциалной записи.
 	void ReformToExponentialNotation(RationalNumerics rational);
 
-	// Получает представления числа в виде BigInteger (можно сказать, что все цифры числа без запятой). 
-	static BigInteger GetBigIntegerFromExponential(ExponentialNotation number);
-
-	// Получает максимальную точность среди двух чисел.
-	static int GetMaxAccuracy(ExponentialNotation exp1, ExponentialNotation exp2);
-
 	ExponentialNotation operator=(ExponentialNotation number);
 
 	friend const ExponentialNotation operator *(const ExponentialNotation&, const ExponentialNotation&);
 
 	friend const ExponentialNotation operator /(const ExponentialNotation&, const ExponentialNotation&);
+
+	friend const ExponentialNotation operator +(const ExponentialNotation&, const ExponentialNotation&);
 
 private:
 	// Основание экспоненциальной записи.
@@ -59,14 +55,29 @@ private:
 	// Текущая точность числа (количество знаков после запятой без учета показателя степени).
 	int _currentAccuracy;
 
+	// Количество знаков после запятой, которое может быть максимально быть. Задается серверным числом.
+	int _maxCountDigitsNotWholePart;
+
+	// Получает представления числа в виде BigInteger (можно сказать, что все цифры числа без запятой). 
+	static BigInteger GetBigIntegerFromExponential(ExponentialNotation number);
+
+	// Получает максимальную точность среди двух чисел.
+	static int GetMaxAccuracy(ExponentialNotation exp1, ExponentialNotation exp2);
+
 	// Подсчитывает количество нулей в начале строки.
 	static int GetCountZerrosInStartStr(string str);
 
 	// Получает значение для целой части.
-	int CalculateSignificandWhole(RationalNumerics rational);
+	int CalculateSignificandWhole(BigInteger wholePart);
+
+	// Проверяет необходимость увеличить целую часть при округлении нецелой части.
+	static bool IsNeedUIncreaseWholePart(BigInteger notWholePart, int countDigitsAfterComma);
 
 	// Вычисляет значение для нецелой части числа. Также в этом методе устанавливается значение для экспоненты.
 	BigInteger CalculateSignificandNotWhole(RationalNumerics rational, BigInteger remainderWholePart,
 		int significandWhole);
+
+	// Округляет по правилам математики экспоненциальное число.
+	void RoundExponentialNotation();
 };
 

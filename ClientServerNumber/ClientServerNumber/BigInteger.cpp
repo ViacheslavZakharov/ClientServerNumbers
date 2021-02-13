@@ -9,7 +9,7 @@ BigInteger::BigInteger()
 // Создает длинное целое число из строки.
 BigInteger::BigInteger(string str)
 {
-	if (str.length() == 0)
+	if (str.length() == 0 || str == string(str.length(), '0'))
 	{
 		this->_sign = 0;
 	}
@@ -714,7 +714,7 @@ string BigInteger::ToString()
 
 void BigInteger::SetZerrosInStart(int countZerro)
 {
-	_countZerroInStart = countZerro;
+	_countZerroInStart += countZerro;
 }
 
 int BigInteger::GetZerroInStart()
@@ -806,9 +806,9 @@ BigInteger BigInteger::CutMathematic(BigInteger number, int countDigits)
 	int countZerrosInStart = number.GetZerroInStart();
 	result.SetZerrosInStart(countZerrosInStart);
 	bool needDecreaseZerros = countZerrosInStart > 0 && resultNumberString.length() < result.ToString().length();
-	countZerrosInStart = needDecreaseZerros ? countZerrosInStart - 1 : countZerrosInStart;
-
-	result.SetZerrosInStart(countZerrosInStart);
+	if (needDecreaseZerros) {
+		result.SetZerrosInStart(-1);
+	}
 
 	return result;
 }

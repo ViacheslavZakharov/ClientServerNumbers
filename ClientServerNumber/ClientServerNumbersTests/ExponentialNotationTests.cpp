@@ -31,7 +31,7 @@ namespace ClientServerNumbersTests
 			{"400999", "100000", "5009999", "1000000", "2,0090 * 10^1", "3"}
 		};
 
-		static const int DEVIDE_TEST_CASE_COUNT = 6;
+		static const int DEVIDE_TEST_CASE_COUNT = 7;
 		string testCaseForDevide[DEVIDE_TEST_CASE_COUNT][6] =
 		{
 			{"53834", "1000", "38401", "1000", "1,402", "3"},
@@ -39,7 +39,8 @@ namespace ClientServerNumbersTests
 			{"834572", "1000", "384", "10", "2,1734 * 10^1", "3"},
 			{"5834", "1000", "3489401", "1000", "2,0 * 10^-3", "3"},
 			{"583", "100", "348540158", "100000", "1,67 * 10^-3", "5"},
-			{"588", "1", "3", "1", "1,96000 * 10^2", "3"}
+			{"588", "1", "3", "1", "1,96 * 10^2", "3"},
+			{"99999", "10000", "1", "1", "1,0 * 10^1", "3"}
 		};
 
 		TEST_METHOD(MultiplyOperator_CorrectData_CorrectResult)
