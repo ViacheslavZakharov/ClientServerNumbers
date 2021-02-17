@@ -1,6 +1,7 @@
 #pragma once
 #include "BigInteger.h"
 #include "RationalNumerics.h"
+#include "Operation.h"
 
 
 class ExponentialNotation
@@ -30,12 +31,15 @@ public:
 	void ReformToExponentialNotation(RationalNumerics rational);
 
 	ExponentialNotation operator=(ExponentialNotation number);
+	const ExponentialNotation operator -() const;
 
 	friend const ExponentialNotation operator *(const ExponentialNotation&, const ExponentialNotation&);
 
 	friend const ExponentialNotation operator /(const ExponentialNotation&, const ExponentialNotation&);
 
 	friend const ExponentialNotation operator +(const ExponentialNotation&, const ExponentialNotation&);
+
+	friend const ExponentialNotation operator -(const ExponentialNotation&, const ExponentialNotation&);
 
 private:
 	// Основание экспоненциальной записи.
@@ -74,10 +78,12 @@ private:
 	static bool IsNeedUIncreaseWholePart(BigInteger notWholePart, int countDigitsAfterComma);
 
 	// Вычисляет значение для нецелой части числа. Также в этом методе устанавливается значение для экспоненты.
-	BigInteger CalculateSignificandNotWhole(RationalNumerics rational, BigInteger remainderWholePart,
-		int significandWhole);
+	void CalculateSignificandNotWhole(RationalNumerics rational, BigInteger remainderWholePart);
 
 	// Округляет по правилам математики экспоненциальное число.
 	void RoundExponentialNotation();
+
+	// Получает результат операция сложения или вычитания.
+	static ExponentialNotation GetOperationResultPlusOrMinus(Operation op, ExponentialNotation left, ExponentialNotation right);
 };
 

@@ -4,6 +4,7 @@
 BigInteger::BigInteger()
 {
 	this->_sign = 0;
+	this->_countZerroInStart = 0;
 }
 
 // Создает длинное целое число из строки.
@@ -42,6 +43,7 @@ BigInteger::BigInteger(string str)
 
 		this->RemoveLeadingZeros();
 	}
+	this->_countZerroInStart = 0;
 }
 
 // Удаляет ведущие нули, т.е. нули в начале числа.
@@ -112,7 +114,7 @@ bool operator ==(const BigInteger& left, const BigInteger& right) {
 			return false;
 		}
 	}
-	// Аналогичная проверка, если левый элемент является нулевым.
+	// Аналогичная проверка, если правый элемент является нулевым.
 	if (right._digits.empty()) {
 		if (left._digits.size() == 1 && left._digits[0] == 0)
 		{
@@ -304,6 +306,7 @@ BigInteger::BigInteger(signed char c)
 	}
 
 	this->_digits.push_back(abs(c));
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует unsigned char к BigInteger.
@@ -318,6 +321,7 @@ BigInteger::BigInteger(unsigned char c)
 		this->_sign = 1;
 	}
 	this->_digits.push_back(c);
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует signed short к BigInteger.
@@ -337,6 +341,7 @@ BigInteger::BigInteger(signed short s)
 	}
 
 	this->_digits.push_back(abs(s));
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует unsigned short к BigInteger.
@@ -351,6 +356,7 @@ BigInteger::BigInteger(unsigned short s)
 		this->_sign = 1;
 	}
 	this->_digits.push_back(s);
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует signed int к BigInteger.
@@ -373,6 +379,7 @@ BigInteger::BigInteger(signed int i) {
 	{
 		this->_digits.push_back(abs(i));
 	}
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует unsigned int к BigInteger.
@@ -392,6 +399,7 @@ BigInteger::BigInteger(unsigned int i)
 	{
 		this->_digits.push_back(i);
 	}
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует signed long к BigInteger.
@@ -415,6 +423,7 @@ BigInteger::BigInteger(signed long l)
 	{
 		this->_digits.push_back(abs(l));
 	}
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует unsigned long к BigInteger.
@@ -434,6 +443,7 @@ BigInteger::BigInteger(unsigned long l)
 	{
 		this->_digits.push_back(l);
 	}
+	this->_countZerroInStart = 0;
 }
 
 // преобразует signed long long к BigInteger.
@@ -456,6 +466,7 @@ BigInteger::BigInteger(signed long long l)
 		this->_digits.push_back(l % BigInteger::BASE);
 		l /= BigInteger::BASE;
 	} while (l != 0);
+	this->_countZerroInStart = 0;
 }
 
 // Преобразует unsigned long long к BigInteger.
@@ -474,6 +485,7 @@ BigInteger::BigInteger(unsigned long long l)
 		this->_digits.push_back(l % BigInteger::BASE);
 		l /= BigInteger::BASE;
 	} while (l != 0);
+	this->_countZerroInStart = 0;
 }
 
 // Постфиксный инкремент.

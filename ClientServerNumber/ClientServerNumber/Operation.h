@@ -1,6 +1,6 @@
 #pragma once
 
-enum Operation
+enum class Operation
 {
 	Plus,
 	Minus,

@@ -120,7 +120,7 @@ private:
 	int _sign;
 	
 	// Количество нулей вначале числа
-	int _countZerroInStart = 0;
+	int _countZerroInStart;
 
 	// Удаляет ведущие нули, т.е. нули в начале числа.
 	void RemoveLeadingZeros();
