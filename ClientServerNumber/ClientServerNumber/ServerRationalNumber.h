@@ -5,15 +5,16 @@
 class ServerRationalNumber 
 {
 public:
-	// Количество знаков для точности по умолчанию.
-	const int ACCURACY_DEFAULT = 3;
+	// Количество знаков нецелой части по умолчанию.
+	static const int COUNT_DIGITS_NOT_WHOLE_DEFAULT = 3;
 
 	ServerRationalNumber();
+	// Конструтор позволяет увеличить или уменьшить точность числа.
+	ServerRationalNumber(RationalNumerics rationalNumeric, int countDigitsNotWhole);
 	ServerRationalNumber(RationalNumerics rationalNumeric);
 	ServerRationalNumber(string numerator, string denominator);
 	ServerRationalNumber(string numerator);
-	ServerRationalNumber(ExponentialNotation exponentialNumber, RationalNumerics rationalNumber, int accuracy);
-	//ServerRationalNumber(int significandWholePart, BigInteger significandNotWholePart, int exponent);
+	ServerRationalNumber(ExponentialNotation exponentialNumber, RationalNumerics rationalNumber, int countDigitsNotWhole);
 
 	friend bool operator ==(const ServerRationalNumber&, const ServerRationalNumber&);
 	friend bool operator <(const ServerRationalNumber&, const ServerRationalNumber&);
@@ -26,63 +27,37 @@ public:
 	friend const ServerRationalNumber operator -(const ServerRationalNumber&, const ServerRationalNumber&);
 	friend const ServerRationalNumber operator *(const ServerRationalNumber&, const ServerRationalNumber&);
 	friend const ServerRationalNumber operator /(const ServerRationalNumber&, const ServerRationalNumber&);
-	friend const ServerRationalNumber operator %(const ServerRationalNumber&, const ServerRationalNumber&);
 
 	ServerRationalNumber operator=(ServerRationalNumber number);
 
-	// Приведение к строке в виде нормальной экспоненциальной записи (x (от 0 до 9) ,... * 10^n).
+	// Приведение к строке в виде нормальной экспоненциальной записи (x (от 1 до 9) ,... * 10^n).
 	string ToString();
-
-	// Увеличивает текущую точность числа на указанное количество знаков.
-	//void IncreaseCurrentAccuracy(int numberDigits);
-
-	// Получает целую часть мантиссы
-	//int GetSignificandWholePart();
-
-	// Получает нецелую часть мантиссы.
-	//BigInteger GetSignificandNotWholePart();
-
-	// Получает показатель степени.
-	//int GetExponent();
 
 	// Получает рациональное число.
 	RationalNumerics GetRationalNumber();
 
-	// Получает текущую точность.
-	int GetCurrentAccuracy();
+	// Получает число в нормальной экспоненциальной форме.
+	ExponentialNotation GetExponentionNumber();
 
-	//ServerRationalNumber operator=(const ServerRationalNumber& number);
+	// Получает текущее количество знаков после запятой.
+	int GetCurrentCountDigitsNotWhole();
+
+	int GetMaxCountDigitsNotWhole();
+
 	~ServerRationalNumber();
 
 private:
-	// Мантисса. (значимая часть числа) нецелая часть мантиссы.
-	//BigInteger _significandNotWholePart;
-
-	// Мантисса. Целая часть - имеет значения от 0 до 9.
-	//int _significandWholePart;
-
-	// Показатель.
-	//int _exponent;
-	
-	// Основание экспоненциальной записи.
-//	const int FUNDAMENT = 10;
-
-	// Макисмальная точность числа.
-	const int MAX_ACCURACY = 16;
 
 	// Рациональное число.
 	RationalNumerics _rational;
 
-	// Текущая точность числа (количество знаков после запятой без учета показателя степени).
-	int _currentAccuracy;
-
-	// Количество нулей вначале числа
-	//int _countZerroInStart = 0;
+	// Текущее количество знаков после запятой без учета показателя степени (т.е. если число 4,5467 * 10^1 => 4-1=3).
+	int _currentCountDigitsNotWhole;
 
 	ExponentialNotation _exponentialNotation;
 
-	// Преобразовывает к эспоненциалной записи.
-//	void ReformToExponentialNotation();
+	// Получает результат бинарной операции.
+	static ServerRationalNumber GetOperationResult(Operation op, ServerRationalNumber left, ServerRationalNumber right);
 
 	// Получает текущую точность числа до количества переданных чисел.
 	//BigInteger SetCurrentAccuracy(int countDigits);

@@ -4,11 +4,17 @@ ServerRationalNumber::ServerRationalNumber() : ServerRationalNumber(RationalNume
 {
 }
 
-ServerRationalNumber::ServerRationalNumber(RationalNumerics rationalNumeric)
+ServerRationalNumber::ServerRationalNumber(RationalNumerics rationalNumeric,
+	int countDigitsNotWhole)
 {
 	_rational = rationalNumeric;
-	_exponentialNotation = ExponentialNotation(rationalNumeric, ACCURACY_DEFAULT);
-	_currentAccuracy = _exponentialNotation.GetCurrentAccuracy();
+	_exponentialNotation = ExponentialNotation(rationalNumeric, countDigitsNotWhole);
+	_currentCountDigitsNotWhole = _exponentialNotation.GetCurrentCountDigitsNotWhole();
+}
+
+ServerRationalNumber::ServerRationalNumber(RationalNumerics rationalNumeric) 
+	: ServerRationalNumber(rationalNumeric, COUNT_DIGITS_NOT_WHOLE_DEFAULT)
+{
 }
 
 ServerRationalNumber::ServerRationalNumber(string numerator, string denominator)
@@ -20,24 +26,12 @@ ServerRationalNumber::ServerRationalNumber(string numerator) :
 { }
 
 ServerRationalNumber::ServerRationalNumber(ExponentialNotation exponentialNumber, RationalNumerics rationalNumber,
-	int accuracy)
+	int countDigitsNotWhole)
 {
 	_exponentialNotation = exponentialNumber;
 	_rational = rationalNumber;
-	_currentAccuracy = accuracy;
+	_currentCountDigitsNotWhole = countDigitsNotWhole;
 }
-
-//ServerRationalNumber::ServerRationalNumber(int significandWholePart, BigInteger significandNotWholePart, int exponent)
-//{
-//	_significandWholePart = significandWholePart;
-//	_significandNotWholePart = significandNotWholePart;
-//	_exponent = exponent;
-//}
-
-//BigInteger ServerRationalNumber::SetCurrentAccuracy(int countDigits)
-//{
-//	return BigInteger::CutMathematic(_significandNotWholePart, countDigits);
-//}
 
 string ServerRationalNumber::ToString()
 {
@@ -46,8 +40,8 @@ string ServerRationalNumber::ToString()
 
 //void ServerRationalNumber::IncreaseCurrentAccuracy(int numberDigits)
 //{
-//	int currentNumberDigits = _currentAccuracy.ToString().size();
-//	_currentAccuracy = SetCurrentAccuracy(currentNumberDigits + numberDigits);
+//	int currentNumberDigits = _currentCountDigitsNotWhole.ToString().size();
+//	_currentCountDigitsNotWhole = SetCurrentAccuracy(currentNumberDigits + numberDigits);
 //}
 
 
@@ -57,20 +51,25 @@ RationalNumerics ServerRationalNumber::GetRationalNumber()
 	return _rational;
 }
 
-int ServerRationalNumber::GetCurrentAccuracy()
+ExponentialNotation ServerRationalNumber::GetExponentionNumber()
 {
-	return _currentAccuracy;
+	return _exponentialNotation;
 }
 
-//BigInteger ServerRationalNumber::GetCurrentAccuracy()
-//{
-//	return _currentAccuracy;
-//}
+int ServerRationalNumber::GetCurrentCountDigitsNotWhole()
+{
+	return _currentCountDigitsNotWhole;
+}
+
+int ServerRationalNumber::GetMaxCountDigitsNotWhole()
+{
+	return _exponentialNotation.GetMaxCountDigitsNotWhole();
+}
 
 ServerRationalNumber ServerRationalNumber::operator=(ServerRationalNumber number)
 {
 	this->_rational = number._rational;
-	this->_currentAccuracy = number._currentAccuracy;
+	this->_currentCountDigitsNotWhole = number._currentCountDigitsNotWhole;
 	this->_exponentialNotation = number._exponentialNotation;
 	return *this;
 }
@@ -107,31 +106,63 @@ bool operator>=(const ServerRationalNumber& left, const ServerRationalNumber& ri
 
 const ServerRationalNumber operator+(const ServerRationalNumber& left, const ServerRationalNumber& right)
 {
-	return left._rational + right._rational;
+	return ServerRationalNumber::GetOperationResult(Operation::Plus, left, right);
 }
 
 const ServerRationalNumber operator-(const ServerRationalNumber& left, const ServerRationalNumber& right)
 {
-	return left._rational - right._rational;
+	return ServerRationalNumber::GetOperationResult(Operation::Minus, left, right);
 }
 
 const ServerRationalNumber operator*(const ServerRationalNumber& left, const ServerRationalNumber& right)
 {
-	ExponentialNotation resultExponential = left._exponentialNotation * right._exponentialNotation;
-	RationalNumerics rationalResult = left._rational * right._rational;
-	return ServerRationalNumber(resultExponential, rationalResult, resultExponential.GetCurrentAccuracy());
+	return ServerRationalNumber::GetOperationResult(Operation::Multiplication, left, right);
 }
 
 const ServerRationalNumber operator/(const ServerRationalNumber& left, const ServerRationalNumber& right)
 {
-	return left._rational / right._rational;
-}
-
-const ServerRationalNumber operator%(const ServerRationalNumber& left, const ServerRationalNumber& right)
-{
-	return left._rational % right._rational;
+	return ServerRationalNumber::GetOperationResult(Operation::Divide, left, right);
 }
 
 ServerRationalNumber::~ServerRationalNumber()
 {
+}
+
+ServerRationalNumber ServerRationalNumber::GetOperationResult(Operation op, ServerRationalNumber left, ServerRationalNumber right)
+{
+	ExponentialNotation resultExponential = ExponentialNotation();
+	RationalNumerics rationalResult = RationalNumerics();
+	
+	switch (op)
+	{
+	case Operation::Plus:
+	{
+		rationalResult = left._rational + right._rational;
+		resultExponential = left._exponentialNotation + right._exponentialNotation;
+		break;
+	}
+	case Operation::Minus:
+	{
+		rationalResult = left._rational - right._rational;
+		resultExponential = left._exponentialNotation - right._exponentialNotation;
+		break;
+	}
+	case Operation::Multiplication:
+	{
+		rationalResult = left._rational * right._rational;
+		resultExponential = left._exponentialNotation * right._exponentialNotation;
+		break;
+	}
+	case Operation::Divide:
+	{
+		rationalResult = left._rational / right._rational;
+		resultExponential = left._exponentialNotation / right._exponentialNotation;
+		break;
+	}
+	default:
+		string exceptionMessage = "Not correct operation exception";
+		throw (exceptionMessage);
+	}
+
+	return ServerRationalNumber(resultExponential, rationalResult, resultExponential.GetCurrentCountDigitsNotWhole());
 }

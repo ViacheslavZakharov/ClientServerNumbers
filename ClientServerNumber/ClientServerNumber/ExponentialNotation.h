@@ -10,7 +10,7 @@ public:
 	ExponentialNotation();
 	ExponentialNotation(RationalNumerics rationalNumeric, int accuracy);
 	ExponentialNotation(int sign, int significandWhole, BigInteger significandNotWhole,
-		int exponent, int accuracy, int maxCountDigitsNotWholePart);
+		int exponent, int currentCountDigitsNotWhole, int maxCountDigitsNotWholePart);
 
 	// Знак.
 	int Sign();
@@ -25,10 +25,19 @@ public:
 	BigInteger GetSignificandNotWholePart();
 
 	// Получает текущую точность.
-	int GetCurrentAccuracy();
+	int GetCurrentCountDigitsNotWhole();
+
+	// Получает максимальную точность.
+	int GetMaxCountDigitsNotWhole();
 
 	// Преобразовывает к эспоненциалной записи.
 	void ReformToExponentialNotation(RationalNumerics rational);
+
+	// Получает модуль числа.
+	static ExponentialNotation Abs(const ExponentialNotation& number);
+
+	// Получает действительную точность числа, сравнивая с идеальным.
+	static int GetAccuracy(ExponentialNotation number, ExponentialNotation idealNumber);
 
 	ExponentialNotation operator=(ExponentialNotation number);
 	const ExponentialNotation operator -() const;
@@ -56,17 +65,14 @@ private:
 	// Показатель.
 	int _exponent;
 
-	// Текущая точность числа (количество знаков после запятой без учета показателя степени).
-	int _currentAccuracy;
+	// Текущее количество знаков после запятой без учета показателя степени (т.е. если число 4,5467 * 10^1 => 4-1=3).
+	int _currentCountDigitsNotWhole;
 
 	// Количество знаков после запятой, которое может быть максимально быть. Задается серверным числом.
 	int _maxCountDigitsNotWholePart;
 
 	// Получает представления числа в виде BigInteger (можно сказать, что все цифры числа без запятой). 
 	static BigInteger GetBigIntegerFromExponential(ExponentialNotation number);
-
-	// Получает максимальную точность среди двух чисел.
-	static int GetMaxAccuracy(ExponentialNotation exp1, ExponentialNotation exp2);
 
 	// Подсчитывает количество нулей в начале строки.
 	static int GetCountZerrosInStartStr(string str);
