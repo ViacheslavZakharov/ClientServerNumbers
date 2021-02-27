@@ -17,31 +17,36 @@ int main()
 	cout << "Демонстрация работы\n";
 	//RationalNumerics rn1 = RationalNumerics("1", "3");
 	//RationalNumerics rn2 = RationalNumerics("1", "3");
+	// 11/13 ; 1/12; 1/112; 55/13; 76/13 = 5 11/13 ;158/589 (нет периода), 337/112 = 3, 1/112
+	ExponentialNotation exp1 = ExponentialNotation(RationalNumerics("337", "112"), 100);
+	//ExponentialNotation exp1 = ExponentialNotation(RationalNumerics("10", "3"), 10);
+	//1 /112
+	cout << exp1.ToString() << "\n";
+	cout<<exp1.ToString(true);
+	//RationalNumerics rn1 = RationalNumerics("400589", "100000");
+	//RationalNumerics rn2 = RationalNumerics("5008956", "1000000");
+	//ServerRationalNumber s1 = ServerRationalNumber(rn1);
+	//ServerRationalNumber s2 = ServerRationalNumber(rn2);
+	//cout << rn1 << " * " << rn2 << " = ";
+	//ClientNumber cn1 = ClientNumber(s1, s2, Operation::Divide);
+	//string clientString = cn1.ToString();
+	//cout << clientString << "\n";
+	//cout << "Точность числа:" << cn1.GetAccuracy() << "\n";
+	//
+	//cout << "Точный ответ: " << cn1.GetAccurateExponentialNumber().ToString() << "\n";
 
-	RationalNumerics rn1 = RationalNumerics("400589", "100000");
-	RationalNumerics rn2 = RationalNumerics("5008956", "1000000");
-	ServerRationalNumber s1 = ServerRationalNumber(rn1);
-	ServerRationalNumber s2 = ServerRationalNumber(rn2);
-	cout << rn1 << " * " << rn2 << " = ";
-	ClientNumber cn1 = ClientNumber(s1, s2, Operation::Divide);
-	string clientString = cn1.ToString();
-	cout << clientString << "\n";
-	cout << "Точность числа:" << cn1.GetAccuracy() << "\n";
-	
-	cout << "Точный ответ: " << cn1.GetAccurateExponentialNumber().ToString() << "\n";
+	//while (true) {
+	//	cout << "Увеличить точность (y/n)?\n";
+	//	string answer;
+	//	cin >> answer;
+	//	if (answer == "n") {
+	//		break;
+	//	}
 
-	while (true) {
-		cout << "Увеличить точность (y/n)?\n";
-		string answer;
-		cin >> answer;
-		if (answer == "n") {
-			break;
-		}
-
-		cn1.IncreaseAccuracyResult(5);
-		cout << cn1.ToString() << "\n";
-		cout << "Точность числа:" << cn1.GetAccuracy() << "\n";
-	}
+	//	cn1.IncreaseAccuracyResult(5);
+	//	cout << cn1.ToString() << "\n";
+	//	cout << "Точность числа:" << cn1.GetAccuracy() << "\n";
+	//}
 	system("pause");
 	return 0;
 }

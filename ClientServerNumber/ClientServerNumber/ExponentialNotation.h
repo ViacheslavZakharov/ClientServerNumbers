@@ -16,7 +16,7 @@ public:
 	int Sign();
 
 	// Приведение к строке в виде нормальной экспоненциальной записи (x (от 0 до 9) ,... * 10^n).
-	string ToString();
+	string ToString(bool withPeriod = false);
 
 	// Получает целую часть мантиссы
 	int GetSignificandWholePart();
@@ -70,6 +70,11 @@ private:
 
 	// Количество знаков после запятой, которое может быть максимально быть. Задается серверным числом.
 	int _maxCountDigitsNotWholePart;
+
+	// Числа до периода.
+	BigInteger _digitsBeforePeriod;
+	// Период числа.
+	BigInteger _period;
 
 	// Получает представления числа в виде BigInteger (можно сказать, что все цифры числа без запятой). 
 	static BigInteger GetBigIntegerFromExponential(ExponentialNotation number);

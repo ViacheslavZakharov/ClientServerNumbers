@@ -8,6 +8,8 @@ ExponentialNotation::ExponentialNotation()
 	_significandNotWhole = 0;
 	_currentCountDigitsNotWhole = 0;
 	_maxCountDigitsNotWholePart = 0;
+	_digitsBeforePeriod = 0;
+	_period = 0;
 }
 
 ExponentialNotation::ExponentialNotation(RationalNumerics rationalNumeric, int accuracy)
@@ -18,6 +20,8 @@ ExponentialNotation::ExponentialNotation(RationalNumerics rationalNumeric, int a
 	_significandNotWhole = 0;
 	_currentCountDigitsNotWhole = accuracy;
 	_maxCountDigitsNotWholePart = accuracy;
+	_digitsBeforePeriod = 0;
+	_period = 0;
 	ReformToExponentialNotation(rationalNumeric);
 }
 
@@ -30,6 +34,8 @@ ExponentialNotation::ExponentialNotation(int sign, int significandWhole, BigInte
 	_exponent = exponent;
 	_currentCountDigitsNotWhole = currentCountDigitsNotWhole;
 	_maxCountDigitsNotWholePart = maxCountDigitsNotWholePart;
+	_digitsBeforePeriod = 0;
+	_period = 0;
 }
 
 int ExponentialNotation::Sign()
@@ -37,7 +43,7 @@ int ExponentialNotation::Sign()
     return _sign;
 }
 
-string ExponentialNotation::ToString()
+string ExponentialNotation::ToString(bool withPeriod)
 {
 	string resultString = "";
 	if (_sign == 0)
@@ -46,7 +52,16 @@ string ExponentialNotation::ToString()
 	}
 
 	resultString = to_string(_significandWhole) + ",";
-	resultString += _significandNotWhole.ToString();
+	string periodString = _period.ToString();
+	if (periodString != "0" && withPeriod) {
+		string digitsBeforePeriod = _digitsBeforePeriod.ToString();
+		digitsBeforePeriod = digitsBeforePeriod == "0" ? "" : digitsBeforePeriod;
+		resultString += digitsBeforePeriod + "(" + periodString + ")";
+	}
+	else {
+		resultString += _significandNotWhole.ToString();
+	}
+	
 	if (_exponent != 0)
 	{
 		resultString += " * " + to_string(FUNDAMENT) + "^" + to_string(_exponent);
@@ -150,6 +165,8 @@ ExponentialNotation ExponentialNotation::operator=(ExponentialNotation number)
 	this->_sign = number._sign;
 	this->_currentCountDigitsNotWhole = number._currentCountDigitsNotWhole;
 	this->_maxCountDigitsNotWholePart = number._maxCountDigitsNotWholePart;
+	this->_digitsBeforePeriod = number._digitsBeforePeriod;
+	this->_period = number._period;
 	return *this;
 }
 
@@ -247,6 +264,11 @@ void ExponentialNotation::CalculateSignificandNotWhole(RationalNumerics rational
 	int countZerroInStart = 0;
 	int temporaryCountDigitsNotWhole = 0;
 	int currentCountZerrosInStart = _significandNotWhole.GetZerroInStart();
+	// Определим список остатков для определения периода. Для знаменателя N остаток может иметь только N значений 0...N-1
+	// Подробнее: https://purecodecpp.com/archives/2782.
+	vector<BigInteger> reminderList;
+	int indexStartPeriod = 0;
+	int indexEndPeriod = 0;
 	// Считаем на одну больше, чтобы затем округлить.
 	while (temporaryCountDigitsNotWhole < _currentCountDigitsNotWhole + 1)
 	{
@@ -271,12 +293,10 @@ void ExponentialNotation::CalculateSignificandNotWhole(RationalNumerics rational
 		_significandNotWhole += numerator / denominator;
 		numerator %= denominator;
 
-		// Если целая часть мантиссы равна 0, то надо взять первую цифру нецелой части для ее определения
-		// и уменьшить степень.
 		if (_significandWhole == 0 && (temporaryCountDigitsNotWhole >= _currentCountDigitsNotWhole + 1 || numerator == 0)) 
 		{
 			string notWholeStr = _significandNotWhole.ToString();
-			if(notWholeStr.length() >= 2 || (notWholeStr.length() == 1 && notWholeStr[0] != '0'))
+			if (notWholeStr.length() >= 2 || (notWholeStr.length() == 1 && notWholeStr[0] != '0'))
 			{
 				_significandWhole = atoi(notWholeStr.substr(0, 1).c_str());
 				string currentNotWhole = notWholeStr.substr(1, notWholeStr.length() - 1);
@@ -285,12 +305,34 @@ void ExponentialNotation::CalculateSignificandNotWhole(RationalNumerics rational
 				countZerroInStart = ExponentialNotation::GetCountZerrosInStartStr(currentNotWhole);
 				_significandNotWhole.SetZerrosInStart(countZerroInStart);
 				_exponent--;
+				if (indexEndPeriod != 0 && indexStartPeriod == 0) {
+					indexStartPeriod = indexEndPeriod - 1;
+					indexEndPeriod = indexStartPeriod + indexEndPeriod;
+				}
 			}
 		}
 
 		if (numerator == 0)
 		{
 			break;
+		}
+
+		vector<BigInteger>::iterator it = find(reminderList.begin(), reminderList.end(), numerator);
+		if (it == reminderList.end() /*|| reminderList.size() < countZerroInStart ||*/) {
+			reminderList.push_back(numerator);
+		}
+		else if(indexEndPeriod == 0) {
+			BigInteger numberIterator = reminderList.begin() - it;
+			indexStartPeriod = numberIterator.GetFirstIntNumber();
+			// Если целая часть уже заполнена и не будет браться из нецелой и остаток находится не на нулевом месте,
+			// То необходимо увеличить индекс начала периода на один, так как остатки отстают от чисел на 1 цифру.
+			if (_significandWhole != 0 && indexStartPeriod != 0) {
+				indexStartPeriod++;
+				indexEndPeriod = _significandNotWhole.ToString().length();
+			}
+			else {
+				indexEndPeriod = _significandNotWhole.ToString().length() - 1;
+			}
 		}
 	}
 
@@ -301,6 +343,23 @@ void ExponentialNotation::CalculateSignificandNotWhole(RationalNumerics rational
 	}
 
 	_significandNotWhole.SetZerrosInStart(countZerroInStart + currentCountZerrosInStart);
+	if (indexEndPeriod == 0) {
+		return;
+	}
+
+	indexStartPeriod += countZerroInStart + currentCountZerrosInStart;
+	indexEndPeriod += countZerroInStart + currentCountZerrosInStart;
+	string notWhole = _significandNotWhole.ToString();
+	if (notWhole.length() >= indexEndPeriod) {
+		_digitsBeforePeriod = BigInteger(notWhole.substr(0, indexStartPeriod));
+		_period = BigInteger(notWhole.substr(indexStartPeriod, indexEndPeriod - indexStartPeriod));
+		if (_digitsBeforePeriod != 0) {
+			_digitsBeforePeriod.SetZerrosInStart(_significandNotWhole.GetZerroInStart());
+		}
+		else {
+			_period.SetZerrosInStart(_significandNotWhole.GetZerroInStart());
+		}
+	}
 }
 
 void ExponentialNotation::RoundExponentialNotation()

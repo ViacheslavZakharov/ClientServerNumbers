@@ -734,6 +734,12 @@ int BigInteger::GetZerroInStart()
 	return _countZerroInStart;
 }
 
+int BigInteger::GetFirstIntNumber()
+{
+	
+	return _digits.size() > 0 ? _digits.front() : 0;
+}
+
 BigInteger BigInteger::_one = BigInteger("1");
 
 BigInteger BigInteger::One()

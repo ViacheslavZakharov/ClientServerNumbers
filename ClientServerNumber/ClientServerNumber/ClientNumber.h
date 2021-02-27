@@ -7,6 +7,9 @@ class ClientNumber
 public:
 	ClientNumber();
 	ClientNumber(ServerRationalNumber s1, ServerRationalNumber s2, Operation operation);
+	// Конструктор для удобства задания рациональных чисел.
+	ClientNumber(string firstNumerator, string firstDenominator, string secondNumerator, string secondDenominator,
+		Operation operation);
 
 	ClientNumber operator=(ClientNumber number);
 

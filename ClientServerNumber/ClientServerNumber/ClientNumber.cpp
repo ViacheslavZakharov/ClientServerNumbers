@@ -18,6 +18,13 @@ ClientNumber::ClientNumber(ServerRationalNumber s1, ServerRationalNumber s2, Ope
 	CalculateAccurateNumber();
 }
 
+ClientNumber::ClientNumber(string firstNumerator, string firstDenominator,
+	string secondNumerator, string secondDenominator, Operation operation)
+	: ClientNumber(ServerRationalNumber(RationalNumerics(firstNumerator, firstDenominator)),
+		ServerRationalNumber(RationalNumerics(secondNumerator, secondDenominator)), operation)
+{
+}
+
 ClientNumber ClientNumber::operator=(ClientNumber number)
 {
 	this->_s1 = number._s1;

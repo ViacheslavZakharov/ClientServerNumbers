@@ -82,6 +82,9 @@ public:
 	// Получает количество нулей в начале числа.
 	int GetZerroInStart();
 
+	// Получает первый элемент вектора цифр.
+	int GetFirstIntNumber();
+
 	// Возвращает число 1.
 	static BigInteger One();
 
@@ -108,6 +111,7 @@ public:
 
 	// Получает действительное количество символов с нулями.
 	static int GetCountDigits(BigInteger number);
+
 private:
 	// внутреннее хранилище числа
 	vector<int> _digits;
