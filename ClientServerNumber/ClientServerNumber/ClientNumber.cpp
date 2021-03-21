@@ -14,7 +14,7 @@ ClientNumber::ClientNumber(ServerRationalNumber s1, ServerRationalNumber s2, Ope
 	this->_s1 = s1;
 	this->_s2 = s2;
 	_operation = op;
-	_resultOperation = GetResultOperation(s1, s2, op);
+	_resultOperation = CalculateResultOperation(s1, s2, op);
 	CalculateAccurateNumber();
 }
 
@@ -35,7 +35,7 @@ ClientNumber ClientNumber::operator=(ClientNumber number)
 	return *this;
 }
 
-ServerRationalNumber ClientNumber::GetResultOperation(ServerRationalNumber s1,
+ServerRationalNumber ClientNumber::CalculateResultOperation(ServerRationalNumber s1,
 	ServerRationalNumber s2, Operation operation)
 {
 	switch (operation)
@@ -60,12 +60,17 @@ void ClientNumber::IncreaseAccuracyResult(int numberDigits)
 	// TODO: Сделать проверку, если точность уже нельзя увеличить, иначе сейчас будут просто добавляться нолики.
 	_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetMaxCountDigitsNotWhole() + 1);
 	_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetMaxCountDigitsNotWhole() + 1);
-	_resultOperation = GetResultOperation(_s1, _s2, _operation);
+	_resultOperation = CalculateResultOperation(_s1, _s2, _operation);
 }
 
 int ClientNumber::GetAccuracy()
 {
 	return ExponentialNotation::GetAccuracy(_resultOperation.GetExponentionNumber(), _accurateExponentialNumber);
+}
+
+ServerRationalNumber ClientNumber::GetResultOperation()
+{
+	return _resultOperation;
 }
 
 ExponentialNotation ClientNumber::GetAccurateExponentialNumber()
@@ -75,8 +80,10 @@ ExponentialNotation ClientNumber::GetAccurateExponentialNumber()
 
 string ClientNumber::ToString()
 {
-	//return _resultOperation.ToString();
-	return "\nРезультат: " + _resultOperation.ToString();
+	return	"\n ->s1:" + _s1.ToString() +
+			"\n ->s2:" + _s2.ToString() +
+			"\n" + ClientNumber::OperationToString(_operation) +
+			"\nРезультат: " + _resultOperation.ToString();
 }
 
 ClientNumber::~ClientNumber()
@@ -86,4 +93,40 @@ ClientNumber::~ClientNumber()
 void ClientNumber::CalculateAccurateNumber()
 {
 	_accurateExponentialNumber = ExponentialNotation(_resultOperation.GetRationalNumber(), MAX_ACCURACY);
+}
+
+ostream& operator<<(ostream& os, const ClientNumber& number)
+{
+	auto n = number;
+	cout << n.ToString();
+	return os;
+}
+
+string ClientNumber::OperationToString(Operation op)
+{
+	switch (op)
+	{
+	case Operation::Plus:   return "+";
+	case Operation::Minus:   return "-";
+	case Operation::Multiplication:   return "*";
+	case Operation::Divide:   return "\\";
+	default:      return "[Unknown Operation type]";
+	}
+}
+
+Operation ClientNumber::CharToOperation(char op)
+{
+	switch (op)
+	{
+	case '/':
+		return Operation::Divide;
+	case '*':
+		return Operation::Multiplication;
+	case '+':
+		return Operation::Plus;
+	case '-':
+		return Operation::Minus;
+	default:
+		throw "Invalid symbol in formula";
+	}
 }

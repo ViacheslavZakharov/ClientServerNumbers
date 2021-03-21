@@ -13,10 +13,6 @@ public:
 
 	ClientNumber operator=(ClientNumber number);
 
-	// Получает результат операции.
-	ServerRationalNumber GetResultOperation(ServerRationalNumber s1,
-		ServerRationalNumber s2, Operation operation);
-
 	// Увеличивает точность результата операции путем увеличения точности Серверных чисел.
 	void IncreaseAccuracyResult(int numberDigits);
 
@@ -24,10 +20,15 @@ public:
 	// в разнице результата операции и идеального числа.
 	int GetAccuracy();
 
+	ServerRationalNumber GetResultOperation();
+
 	// Получает точное число.
 	ExponentialNotation GetAccurateExponentialNumber();
 
 	string ToString();
+	friend ostream& operator <<(ostream&, const ClientNumber&);
+	static string OperationToString(Operation op);
+	static Operation CharToOperation(char op);
 
 	~ClientNumber();
 
@@ -46,4 +47,8 @@ private:
 
 	// Вычисляет точное значение операции.
 	void CalculateAccurateNumber();
+
+	// Получает результат операции.
+	ServerRationalNumber CalculateResultOperation(ServerRationalNumber s1,
+		ServerRationalNumber s2, Operation operation);
 };

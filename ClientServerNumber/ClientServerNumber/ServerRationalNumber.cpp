@@ -124,6 +124,13 @@ const ServerRationalNumber operator/(const ServerRationalNumber& left, const Ser
 	return ServerRationalNumber::GetOperationResult(Operation::Divide, left, right);
 }
 
+ostream& operator<<(ostream& os, const ServerRationalNumber& number)
+{
+	ServerRationalNumber s = number;
+	cout << s.ToString();
+	return os;
+}
+
 ServerRationalNumber::~ServerRationalNumber()
 {
 }

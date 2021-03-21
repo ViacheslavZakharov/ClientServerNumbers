@@ -1,6 +1,9 @@
 #pragma once
 #include "RationalNumerics.h"
 #include "ExponentialNotation.h"
+#include <iostream>
+
+using namespace std;
 
 class ServerRationalNumber 
 {
@@ -32,6 +35,8 @@ public:
 
 	// Приведение к строке в виде нормальной экспоненциальной записи (x (от 1 до 9) ,... * 10^n).
 	string ToString();
+
+	friend ostream& operator <<(ostream&, const ServerRationalNumber&);
 
 	// Получает рациональное число.
 	RationalNumerics GetRationalNumber();

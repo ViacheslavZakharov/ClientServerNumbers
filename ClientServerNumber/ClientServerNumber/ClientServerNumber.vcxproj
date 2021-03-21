@@ -118,6 +118,7 @@
     <ClCompile Include="BigInteger.cpp" />
     <ClCompile Include="ClientNumber.cpp" />
     <ClCompile Include="ExponentialNotation.cpp" />
+    <ClCompile Include="FormulaRecognition.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RationalNumerics.cpp" />
     <ClCompile Include="ServerRationalNumber.cpp" />
@@ -126,9 +127,12 @@
     <ClInclude Include="BigInteger.h" />
     <ClInclude Include="ClientNumber.h" />
     <ClInclude Include="ExponentialNotation.h" />
+    <ClInclude Include="FormulaRecognition.h" />
+    <ClInclude Include="NodeStack.h" />
     <ClInclude Include="Operation.h" />
     <ClInclude Include="RationalNumerics.h" />
     <ClInclude Include="ServerRationalNumber.h" />
+    <ClInclude Include="StackList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
