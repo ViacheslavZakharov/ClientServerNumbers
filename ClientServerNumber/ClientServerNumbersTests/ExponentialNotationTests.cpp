@@ -22,7 +22,7 @@ namespace ClientServerNumbersTests
 * 5) 400999 / 100000 * 5009999 / 1000000
 */
 // Количество кейсов.
-		static const int MULTIPLY_TEST_CASE_COUNT = 8;
+		static const int MULTIPLY_TEST_CASE_COUNT = 10;
 		string testCaseForMultiply[MULTIPLY_TEST_CASE_COUNT][6] =
 		{
 			{"1", "43", "7", "158", "1,0 * 10^-3", "3"}, // 0,023 * 0,044 = 0,001
@@ -32,7 +32,9 @@ namespace ClientServerNumbersTests
 			{"1", "3", "-1", "3", "-1,11 * 10^-1", "3"}, // 0,333 * -0,333 = -0,111
 			{"-1", "3", "-1", "3", "1,11 * 10^-1", "3"}, // -0,333 * -0,333 = -0,111
 			{"400589", "100000", "5008956", "1000000", "2,0066 * 10^1", "3"}, // 4,00589 * 5,008956 = 20,066
-			{"400999", "100000", "5009999", "1000000", "2,0090 * 10^1", "3"} // 4,00999 * 5,009999 = 20,090
+			{"400999", "100000", "5009999", "1000000", "2,0090 * 10^1", "3"}, // 4,00999 * 5,009999 = 20,090
+			{"108", "1", "5", "1", "5,40000 * 10^2", "3"}, // 108 / 5 = 21,6
+			{"108025", "10", "34", "1", "3,67285000 * 10^5", "3"} // 10802,5 / 34 = 317,721
 		};
 
 		TEST_METHOD(MultiplyOperator_CorrectData_CorrectResult)
@@ -48,7 +50,7 @@ namespace ClientServerNumbersTests
 
 #pragma region Devide / Tests
 
-		static const int DEVIDE_TEST_CASE_COUNT = 11;
+		static const int DEVIDE_TEST_CASE_COUNT = 15;
 		string testCaseForDevide[DEVIDE_TEST_CASE_COUNT][6] =
 		{
 			{"53834", "1000", "38401", "1000", "1,402", "3"}, // 53,834 / 38,401 = 1,402
@@ -59,9 +61,13 @@ namespace ClientServerNumbersTests
 			{"834572", "1000", "384", "10", "2,1734 * 10^1", "3"}, // 834,572 / 38,4 = 21,734
 			{"5834", "1000", "3489401", "1000", "2,0 * 10^-3", "3"}, // 5,834 / 3489,401 = 0,002
 			{"583", "100", "348540158", "100000", "1,67 * 10^-3", "5"}, //5,83 / 3485,40158 = 0,00167
-			{"588", "1", "3", "1", "1,96000 * 10^2", "3"}, // 588,0 / 3,0 = 196
+			{"588", "1", "3", "1", "1,96 * 10^2", "3"}, // 588,0 / 3,0 = 196
 			{"99999", "10000", "1", "1", "1,0 * 10^1", "3"}, // 9,9999 / 1 = 10
-			{"50484", "1000", "3", "10", "1,68280 * 10^2", "3"} // 50,484 / 0,3 = 168,280
+			{"50484", "1000", "3", "10", "1,6828 * 10^2", "3"}, // 50,484 / 0,3 = 168,28
+			{"108", "1", "5", "1", "2,16 * 10^1", "3"}, // 108 / 5 = 21,6
+			{"108", "1", "3", "1", "3,6 * 10^1", "3"}, // 108 / 3 = 36
+			{"1085", "10", "34", "1", "3,191", "3"}, // 108,5 / 34 = 3,191
+			{"108025", "10", "34", "1", "3,17721 * 10^2", "3"} // 10802,5 / 34 = 317,721
 		};
 
 		TEST_METHOD(DevideOperator_CorrectData_CorrectResult)
@@ -79,7 +85,7 @@ namespace ClientServerNumbersTests
 
 #pragma region Plus / Tests
 
-		static const int PLUS_TEST_CASE_COUNT = 9;
+		static const int PLUS_TEST_CASE_COUNT = 10;
 		string testCaseForPlus[PLUS_TEST_CASE_COUNT][6] =
 		{
 			{"53834", "1000", "38401", "1000", "9,2235 * 10^1", "3"}, // 53,834 + 38,401 = 92,235
@@ -91,6 +97,7 @@ namespace ClientServerNumbersTests
 			{"-1", "1000", "9", "1000", "8,0 * 10^-3", "3"}, // -0,001 + 0,009 = 0,008
 			{"-9", "1000", "9", "1000", "0", "3"}, // -0,009 + 0,009 = 0
 			{"-9", "1000", "1", "1000", "-8,0 * 10^-3", "3"}, // -0,009 + 0,001 = -0,008
+			{"100", "1", "380", "1", "4,80000 * 10^2", "3"} // 100 + 380 = 480
 		};
 
 		TEST_METHOD(PlusOperator_CorrectData_CorrectResult)
@@ -108,8 +115,8 @@ namespace ClientServerNumbersTests
 
 #pragma region Minus / Tests
 
-		static const int MINUS_TEST_CASE_COUNT = 9;
-		string testCaseForMinus[MINUS_TEST_CASE_COUNT][6] =
+		static const int CONVERT_PPN_TEST_CASE_COUNT = 9;
+		string testCaseForMinus[CONVERT_PPN_TEST_CASE_COUNT][6] =
 		{
 			{"53834", "1000", "38401", "1000", "1,5433 * 10^1", "3"}, // 53,834 - 38,401 = 15,433
 			{"4827", "100", "38407", "1000", "9,863", "3"}, // 48,27 - 38,407 = 9,863
@@ -125,7 +132,7 @@ namespace ClientServerNumbersTests
 		TEST_METHOD(MinusOperator_CorrectData_CorrectResult)
 		{
 			ExponentialNotation result = ExponentialNotation();
-			for (int i = 0; i < MINUS_TEST_CASE_COUNT; i++) {
+			for (int i = 0; i < CONVERT_PPN_TEST_CASE_COUNT; i++) {
 				result = GetExponentialNotation(testCaseForMinus[i][0], testCaseForMinus[i][1],
 					testCaseForMinus[i][5])
 					- GetExponentialNotation(testCaseForMinus[i][2], testCaseForMinus[i][3], testCaseForMinus[i][5]);

@@ -54,6 +54,9 @@ private:
 	// Основание экспоненциальной записи.
 	const int FUNDAMENT = 10;
 
+	// Количество знаков нецелой части по умолчанию.
+	static const int COUNT_DIGITS_NOT_WHOLE_DEFAULT = 3;
+
 	int _sign;
 
 	// Мантисса. Целая часть - имеет значения от 0 до 9.
@@ -81,9 +84,6 @@ private:
 
 	// Подсчитывает количество нулей в начале строки.
 	static int GetCountZerrosInStartStr(string str);
-
-	// Получает значение для целой части.
-	int CalculateSignificandWhole(BigInteger wholePart);
 
 	// Проверяет необходимость увеличить целую часть при округлении нецелой части.
 	static bool IsNeedUIncreaseWholePart(BigInteger notWholePart, int countDigitsAfterComma);

@@ -104,8 +104,19 @@ void ExponentialNotation::ReformToExponentialNotation(RationalNumerics rational)
 	}
 
 	BigInteger wholePart = rational.GetWholePart();
+	if (wholePart != 0) {
+		string wholePartStr = BigInteger::Abs(wholePart).ToString();
+		_significandWhole = wholePartStr[0] - '0';
+		string withoutWholePart = wholePartStr.substr(1, wholePartStr.length() - 1);
+		BigInteger withoutWholePartBI = BigInteger(withoutWholePart);
+		RationalNumerics fraction = rational.GetFractionPart();
+		if (withoutWholePartBI != 0 || (fraction != 0 && withoutWholePartBI == 0)) {
+			int countZerroInStart = GetCountZerrosInStartStr(withoutWholePart);
+			_significandNotWhole.SetZerrosInStart(countZerroInStart);
+		}
+		_exponent += withoutWholePart.length();
+	}
 	// Если целая часть числа больше нуля, вычислим разницу целой части числа и мантиссы (от 1 до 9) * 10^n.
-	_significandWhole = CalculateSignificandWhole(wholePart);
 	BigInteger remainderWholePart = _significandWhole == 0 
 		? BigInteger()
 		: wholePart - _significandWhole * BigInteger(FUNDAMENT).Pow(_exponent);
@@ -197,32 +208,6 @@ int ExponentialNotation::GetCountZerrosInStartStr(string str)
 	return countZerroInStart;
 }
 
-int ExponentialNotation::CalculateSignificandWhole(BigInteger wholePart)
-{
-	int significandWhole = 0;
-	// Если целая часть числа больше нуля, вычислим разницу целой части числа и мантиссы(от 1 до 9)* 10^n.
-	if (wholePart != 0)
-	{
-		BigInteger tempSignificandWholePart = wholePart;
-		if (tempSignificandWholePart >= FUNDAMENT)
-		{
-			while (tempSignificandWholePart >= FUNDAMENT)
-			{
-				// Если без остатка делится на основание, то необходимо добавить 0 к началу нецелой части.
-				if (tempSignificandWholePart % FUNDAMENT == 0)
-				{
-					_significandNotWhole.SetZerrosInStart(1);
-				}
-				tempSignificandWholePart /= FUNDAMENT;
-				_exponent++;
-			}
-		}
-		significandWhole = atoi(tempSignificandWholePart.ToString().c_str());
-	}
-
-	return significandWhole;
-}
-
 bool ExponentialNotation::IsNeedUIncreaseWholePart(BigInteger notWholePart, int countDigitsAfterComma)
 {
 	string notWholePartStr = notWholePart.ToString();
@@ -250,7 +235,9 @@ void ExponentialNotation::CalculateSignificandNotWhole(RationalNumerics rational
 		string fullWholePart = rational.GetWholePart().ToString();
 		_exponent = fullWholePart.length() - 1;
 		_currentCountDigitsNotWhole = 0;
+		int countZerroInStart = _significandNotWhole.GetZerroInStart();
 		_significandNotWhole = BigInteger(fullWholePart.substr(1, fullWholePart.length() - 1));
+		_significandNotWhole.SetZerrosInStart(countZerroInStart);
 		return;
 	}
 	BigInteger numerator = fractionPart.Numerator();
@@ -446,8 +433,11 @@ ExponentialNotation ExponentialNotation::GetOperationResultPlusOrMinus(Operation
 	resultExponent = (int)resultStr.length() - 1 - maxCountDigitsNotWholePart;
 
 	notWholeSignificand = BigInteger(resultStr.substr(1, resultStr.length() - 1).c_str());
-	int countZerrosInStart = ExponentialNotation::GetCountZerrosInStartStr(resultStr.substr(1, resultStr.length() - 1));
-	notWholeSignificand.SetZerrosInStart(countZerrosInStart);
+	if (notWholeSignificand != 0) {
+		// Посчитаем количество нулей в начале нецелой части.
+		int countZerrosInStart = ExponentialNotation::GetCountZerrosInStartStr(resultStr.substr(1, resultStr.length() - 1));
+		notWholeSignificand.SetZerrosInStart(countZerrosInStart);
+	}	
 
 	ExponentialNotation result = ExponentialNotation(sign, wholeSignificand, notWholeSignificand, resultExponent,
 		currentCountDigitsNotWhole, maxCountDigitsNotWholePart);
@@ -490,13 +480,14 @@ const ExponentialNotation operator*(const ExponentialNotation& left, const Expon
 	int wholeSignificand = resultString[0] - '0';
 	string notWholeSignificandStr = resultString.substr(1, resultString.length() - 1);
 	BigInteger notWholeSignificand = BigInteger(notWholeSignificandStr);
-	// Посчитаем количество нулей в начале нецелой части.
-	int countZerroInStart = ExponentialNotation::GetCountZerrosInStartStr(notWholeSignificandStr);
-	notWholeSignificand.SetZerrosInStart(countZerroInStart);
+	if (notWholeSignificand != 0) {
+		// Посчитаем количество нулей в начале нецелой части.
+		int countZerroInStart = ExponentialNotation::GetCountZerrosInStartStr(notWholeSignificandStr);
+		notWholeSignificand.SetZerrosInStart(countZerroInStart);
+	}
 
 	// Определим результирующую точность как большую из левого и правого.
-	// Подумать над правильностью этого действия.
-	/*int currentCountDigitsNotWhole = std::max(l._currentCountDigitsNotWhole, r._currentCountDigitsNotWhole);*/
+	// TODO: Подумать над правильностью этого действия.
 	int currentCountDigitsNotWhole = std::max(l._maxCountDigitsNotWholePart, r._maxCountDigitsNotWholePart);
 	int maxCountDigitsNotWholePart = currentCountDigitsNotWhole;
 	ExponentialNotation result = ExponentialNotation(sign, wholeSignificand, notWholeSignificand, resultExponent,
@@ -530,36 +521,12 @@ const ExponentialNotation operator/(const ExponentialNotation& numerator, const 
 	string numeratorStr = numeratorBI.ToString();
 	BigInteger denominatorBI = ExponentialNotation::GetBigIntegerFromExponential(denominator);
 	string denominatorStr = denominatorBI.ToString();
-
-	/*int currentCountDigitsNotWhole = std::max(n._currentCountDigitsNotWhole, d._currentCountDigitsNotWhole);*/
-	int currentCountDigitsNotWhole = std::max(n._maxCountDigitsNotWholePart, d._maxCountDigitsNotWholePart);
-	int maxCountDigitsNotWholePart = currentCountDigitsNotWhole;
-
-	// Добавляем к строке числителя количество нулей равное максимальной точности + 1, чтобы потом округлить.
-	numeratorStr += string(currentCountDigitsNotWhole + 1, '0');
-	BigInteger resultBigInt = BigInteger(numeratorStr) / BigInteger(denominatorStr);
-	// Теперь нужно отделить целую от нецелой части.
-	int sign = resultBigInt.Sign();
-	string resultStr = resultBigInt.ToString();
-
-	resultStr = sign < 0 ? resultStr.substr(1, resultStr.length() - 1) : resultStr;
-
-	BigInteger notWholeResult = BigInteger(resultStr.substr(1, resultStr.length() - 1));
-	int wholeResult = resultStr[0] - '0';
-	int exponentResult = resultStr.length() - 1 - (currentCountDigitsNotWhole + 1);
-	int countZerrosInStart = 0;
-
-	// Результат получился 1 и больше - целая часть равна разнице с точностью.
-	if (resultStr.length() > currentCountDigitsNotWhole + 1 && notWholeResult != 0)
-	{
-		countZerrosInStart = ExponentialNotation::GetCountZerrosInStartStr(resultStr.substr(1, resultStr.length() - 1));
-		notWholeResult.SetZerrosInStart(countZerrosInStart);
-	}
-
-	ExponentialNotation result = ExponentialNotation(sign, wholeResult, notWholeResult, exponentResult, currentCountDigitsNotWhole,
-		maxCountDigitsNotWholePart);
-	result.RoundExponentialNotation();
-
+	RationalNumerics rational = RationalNumerics(numeratorBI, denominatorBI);
+	int accuracy = std::max(n._currentCountDigitsNotWhole, d._currentCountDigitsNotWhole);
+	accuracy = accuracy < ExponentialNotation::COUNT_DIGITS_NOT_WHOLE_DEFAULT 
+		? ExponentialNotation::COUNT_DIGITS_NOT_WHOLE_DEFAULT 
+		: accuracy;
+	ExponentialNotation result = ExponentialNotation(rational, accuracy);
 	return result;
 }
 

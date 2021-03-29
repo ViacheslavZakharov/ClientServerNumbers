@@ -12,9 +12,9 @@ public:
 	FormulaRecognition();
 	static string ClearBadSymbolsInFormula(string formula);
 	// Преобразует строку в обратную польскую запись.
-	string ConvertPPN(string formulaString);
+	static string ConvertPPN(string formulaString);
 	// Вычисляет значение формулы.
-	StackList<ClientNumber> Calculate(string formula);
+	static StackList<ClientNumber> Calculate(string formula);
 	~FormulaRecognition();
 private:
 	static bool IsArithmeticOperator(char c);
