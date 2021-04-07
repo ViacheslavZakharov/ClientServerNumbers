@@ -11,13 +11,14 @@ class StackList
 {
 public:
     // Конструктор по умолчанию.
-    StackList(){ pTop = nullptr; }
+    StackList(){ pTop = nullptr; _count = 0; }
 
-    // конструктор копіювання
+    // Конструктор копированния
     StackList(const StackList& SL) {
         NodeStack<T>* p; // дополнительные указатели
         NodeStack<T>* p2;
         NodeStack<T>* p3;
+        _count = SL._count;
 
         // Инициализировать pTop
         pTop = nullptr;
@@ -77,25 +78,12 @@ public:
 
         // 2. Перенаправить pTop на p
         pTop = p;
+        _count++;
     }
 
     // Количество элементов в стеке
     int Count() {
-        if (pTop == nullptr)
-            return 0;
-        else
-        {
-            NodeStack<T>* p = pTop;
-            int count = 0;
-
-            while (p != nullptr)
-            {
-                count++;
-                p = p->next;
-            }
-
-            return count;
-        }
+        return _count;
     }
 
     // очищает стек - удаляет все элементы из стека
@@ -112,12 +100,14 @@ public:
             delete p2; // удалить память, выделенную для предыдущего элемента
         }
         pTop = nullptr; // поправить вершину стека
+        _count = 0;
     }
 
     // оператор копирования
     StackList<T>& operator=(const StackList<T>& LS){
         // есть ли элементы в стеке?
         if (pTop != nullptr) Empty();
+        _count = LS._count;
 
         NodeStack<T>* p; // дополнительный указатель
         NodeStack<T>* p2;
@@ -202,6 +192,8 @@ public:
         // Освободить память, выделенную под 1-й элемент
         delete p2;
 
+        _count--;
+
         // вернуть item
         return item;
     }
@@ -213,4 +205,5 @@ public:
 private:
     // Указатель на вершину стека
     NodeStack<T>* pTop;
+    int _count;
 };

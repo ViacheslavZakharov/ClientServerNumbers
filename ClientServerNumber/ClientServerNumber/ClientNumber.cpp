@@ -82,7 +82,7 @@ string ClientNumber::ToString()
 {
 	return	"\n ->s1:" + _s1.ToString() +
 			"\n ->s2:" + _s2.ToString() +
-			"\n" + ClientNumber::OperationToString(_operation) +
+			"\nОперация:" + ClientNumber::OperationToString(_operation) +
 			"\nРезультат: " + _resultOperation.ToString();
 }
 
@@ -109,7 +109,7 @@ string ClientNumber::OperationToString(Operation op)
 	case Operation::Plus:   return "+";
 	case Operation::Minus:   return "-";
 	case Operation::Multiplication:   return "*";
-	case Operation::Divide:   return "\\";
+	case Operation::Divide:   return "/";
 	default:      return "[Unknown Operation type]";
 	}
 }

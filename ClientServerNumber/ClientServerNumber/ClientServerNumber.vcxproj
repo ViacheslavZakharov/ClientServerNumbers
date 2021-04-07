@@ -118,6 +118,7 @@
     <ClCompile Include="BigInteger.cpp" />
     <ClCompile Include="ClientNumber.cpp" />
     <ClCompile Include="ExponentialNotation.cpp" />
+    <ClCompile Include="FormulaManager.cpp" />
     <ClCompile Include="FormulaRecognition.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RationalNumerics.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="BigInteger.h" />
     <ClInclude Include="ClientNumber.h" />
     <ClInclude Include="ExponentialNotation.h" />
+    <ClInclude Include="FormulaManager.h" />
     <ClInclude Include="FormulaRecognition.h" />
     <ClInclude Include="FormulaRecognitionTests.h" />
     <ClInclude Include="NodeStack.h" />

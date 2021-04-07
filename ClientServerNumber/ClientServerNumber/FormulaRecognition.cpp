@@ -8,11 +8,6 @@ StackList<ClientNumber> FormulaRecognition::Calculate(string formula)
 {
 	StackList<ServerRationalNumber> serverRationalNumbersStack;
 	StackList<ClientNumber> resultClientNumbersStack;
-	BigInteger numerator = BigInteger();
-	BigInteger denominator = BigInteger();
-	Operation op = Operation::Plus;
-	bool isnumeratorCalculate = false;
-	bool isDenominatorCalculate = false;
 	for (auto i = 0; i < formula.length(); i++)
 	{
 		if (formula[i] == ' ')
