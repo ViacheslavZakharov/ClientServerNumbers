@@ -58,8 +58,8 @@ void ClientNumber::IncreaseAccuracyResult(int numberDigits)
 	//_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetCurrentCountDigitsNotWhole() + 1);
 	//_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetCurrentCountDigitsNotWhole() + 1);
 	// TODO: Сделать проверку, если точность уже нельзя увеличить, иначе сейчас будут просто добавляться нолики.
-	_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetMaxCountDigitsNotWhole() + 1);
-	_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetMaxCountDigitsNotWhole() + 1);
+	_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetMaxCountDigitsNotWhole() + numberDigits);
+	_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetMaxCountDigitsNotWhole() + numberDigits);
 	_resultOperation = CalculateResultOperation(_s1, _s2, _operation);
 }
 
@@ -73,6 +73,21 @@ ServerRationalNumber ClientNumber::GetResultOperation()
 	return _resultOperation;
 }
 
+ServerRationalNumber ClientNumber::GetLeftServerNumber()
+{
+	return _s1;
+}
+
+ServerRationalNumber ClientNumber::GetRightServerNumber()
+{
+	return _s2;
+}
+
+Operation ClientNumber::GetOperation()
+{
+	return _operation;
+}
+
 ExponentialNotation ClientNumber::GetAccurateExponentialNumber()
 {
 	return _accurateExponentialNumber;
@@ -80,10 +95,18 @@ ExponentialNotation ClientNumber::GetAccurateExponentialNumber()
 
 string ClientNumber::ToString()
 {
-	return	"\n ->s1:" + _s1.ToString() +
+	return	"\n-------------------------\n ->s1:" + _s1.ToString() +
 			"\n ->s2:" + _s2.ToString() +
 			"\nОперация:" + ClientNumber::OperationToString(_operation) +
 			"\nРезультат: " + _resultOperation.ToString();
+}
+
+int ClientNumber::GetRealAccuracyNumber()
+{
+	ExponentialNotation diff = ExponentialNotation::Abs(
+		ExponentialNotation::Abs(_accurateExponentialNumber) - 
+		ExponentialNotation::Abs(_resultOperation.GetExponentionNumber()));
+		return std::abs(diff.GetExponent());
 }
 
 ClientNumber::~ClientNumber()

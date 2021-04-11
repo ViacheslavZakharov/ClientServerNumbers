@@ -23,7 +23,7 @@ namespace ClientServerNumbersTests
 		TEST_METHOD(Constructor_1On3_ReturnCorrectResult)
 		{
 			ServerRationalNumber s1 = ServerRationalNumber("1","3");
-			Assert::AreEqual(string("0,333"), s1.ToString());
+			Assert::AreEqual(string("3,33 * 10^-1"), s1.ToString());
 		}
 
 		//TEST_METHOD(Constructor_1On133_ReturnCorrectResult)
@@ -35,7 +35,7 @@ namespace ClientServerNumbersTests
 		TEST_METHOD(Constructor_1On4_ReturnCorrectResult)
 		{
 			ServerRationalNumber s1 = ServerRationalNumber("1", "4");
-			Assert::AreEqual(string("0,25"), s1.ToString());
+			Assert::AreEqual(string("2,5 * 10^-1"), s1.ToString());
 		}
 
 		TEST_METHOD(Constructor_100_ReturnCorrectResult)
@@ -116,7 +116,7 @@ namespace ClientServerNumbersTests
 			ServerRationalNumber s2 = ServerRationalNumber("1", "3");
 			ServerRationalNumber result = s1 + s2;
 
-			Assert::AreEqual(string("0,667"), result.ToString());
+			Assert::AreEqual(string("6,66 * 10^-1"), result.ToString());
 		}
 
 		TEST_METHOD(PlusOperator_2On3And2On3_ReturnCorrectResult)
@@ -125,7 +125,7 @@ namespace ClientServerNumbersTests
 			ServerRationalNumber s2 = ServerRationalNumber("2", "3");
 			ServerRationalNumber result = s1 + s2;
 
-			Assert::AreEqual(string("1,333"), result.ToString());
+			Assert::AreEqual(string("1,334"), result.ToString());
 		}
 
 		//TEST_METHOD(PlusOperator_100On7And100On7_ReturnCorrectResult)
@@ -143,7 +143,7 @@ namespace ClientServerNumbersTests
 			ServerRationalNumber s2 = ServerRationalNumber("1", "4");
 			ServerRationalNumber result = s1 + s2;
 
-			Assert::AreEqual(string("0,917"), result.ToString());
+			Assert::AreEqual(string("9,17 * 10^-1"), result.ToString());
 		}
 
 		TEST_METHOD(PlusOperator_3On2And2On3_ReturnCorrectResult)
@@ -161,7 +161,7 @@ namespace ClientServerNumbersTests
 			ServerRationalNumber s2 = ServerRationalNumber("2", "3");
 			ServerRationalNumber result = s1 - s2;
 
-			Assert::AreEqual(string("0,833"), result.ToString());
+			Assert::AreEqual(string("8,33 * 10^-1"), result.ToString());
 		}
 
 		//TEST_METHOD(MultiplyOperator_3On2And2On3_ReturnCorrectResult)

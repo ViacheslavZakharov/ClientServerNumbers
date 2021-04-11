@@ -138,6 +138,8 @@ public:
         return _pTop->item;
     }
 
+    NodeStack<T>* GetPTail(){ return _pTail; }
+
 private:
     // Указатель на вершину стека.
     NodeStack<T>* _pTop;

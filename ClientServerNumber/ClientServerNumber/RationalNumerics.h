@@ -61,6 +61,8 @@ public:
 	friend const RationalNumerics operator /(RationalNumerics, const RationalNumerics&);
 	friend const RationalNumerics operator %(RationalNumerics, const RationalNumerics&);
 
+	RationalNumerics operator=(RationalNumerics number);
+
 	friend ostream& operator <<(ostream&, const RationalNumerics&);
 	operator string() const;
 

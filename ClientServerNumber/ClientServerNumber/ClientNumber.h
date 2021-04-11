@@ -21,6 +21,9 @@ public:
 	int GetAccuracy();
 
 	ServerRationalNumber GetResultOperation();
+	ServerRationalNumber GetLeftServerNumber();
+	ServerRationalNumber GetRightServerNumber();
+	Operation GetOperation();
 
 	// Получает точное число.
 	ExponentialNotation GetAccurateExponentialNumber();
@@ -29,6 +32,9 @@ public:
 	friend ostream& operator <<(ostream&, const ClientNumber&);
 	static string OperationToString(Operation op);
 	static Operation CharToOperation(char op);
+
+	// Получает действительную точность числа. Как разницу очень точного и действительного.
+	int GetRealAccuracyNumber();
 
 	~ClientNumber();
 

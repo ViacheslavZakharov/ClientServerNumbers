@@ -223,5 +223,26 @@ namespace ClientServerNumbersTests
 
 #pragma endregion ComparisonOperators.Tests
 
+#pragma PlusOperator
+
+		static const int PLUS_TEST_CASE_COUNT = 2;
+		string testCaseForPlus[PLUS_TEST_CASE_COUNT][7] =
+		{
+			{"1", "3", "1", "3", "0", "1", "2/3"}, // (1/3 - 0) + 1/3 = 2/3
+			{"1", "3", "3", "4", "2", "3", "5/12"} // (1/3 - 2/3) + 3/4 = 5/12
+		};
+		TEST_METHOD(PlusOperator_DifferentNumber_CorrectResult)
+		{
+			for (int i = 0; i < PLUS_TEST_CASE_COUNT; i++) {
+				RationalNumerics r1(testCaseForPlus[i][0], testCaseForPlus[i][1]);
+				RationalNumerics r2(testCaseForPlus[i][2], testCaseForPlus[i][3]);
+				r1 = r1 - RationalNumerics(testCaseForPlus[i][4], testCaseForPlus[i][5]);
+				RationalNumerics result = r1 + r2;
+				Assert::AreEqual(string(testCaseForPlus[i][6]), result.ToString());
+			}
+		}
+
+#pragma endregion PlusOperator
+
 	};
 }

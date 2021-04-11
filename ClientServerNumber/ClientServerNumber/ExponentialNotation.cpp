@@ -84,6 +84,11 @@ BigInteger ExponentialNotation::GetSignificandNotWholePart()
     return _significandNotWhole;
 }
 
+int ExponentialNotation::GetExponent()
+{
+	return _exponent;
+}
+
 int ExponentialNotation::GetCurrentCountDigitsNotWhole()
 {
 	return _currentCountDigitsNotWhole;
@@ -128,7 +133,7 @@ void ExponentialNotation::ReformToExponentialNotation(RationalNumerics rational)
 ExponentialNotation ExponentialNotation::Abs(const ExponentialNotation& number)
 {
 	ExponentialNotation result = number;
-	if (result.Sign() < 0)
+	if (result._sign < 0)
 	{
 		result._sign = 1;
 	}

@@ -179,35 +179,78 @@ bool operator>=(const RationalNumerics& left, const RationalNumerics& right)
 // a/b + c/d  == (ad + bc)/bd
 const RationalNumerics operator+(RationalNumerics left, const RationalNumerics& right)
 {
+	BigInteger leftNumerator = left._numerator * right._denominator;
+	BigInteger rightNumerator = left._denominator * right._numerator;
 
-	return RationalNumerics((left._numerator * right._denominator) + (left._denominator * right._numerator),
-		left._denominator * right._denominator);
+	if (left._sign == -1)
+	{
+		leftNumerator = -leftNumerator;
+	}
+	if (right._sign == -1)
+	{
+		rightNumerator = -rightNumerator;
+	}
+	
+	return RationalNumerics(leftNumerator + rightNumerator, left._denominator * right._denominator);
 }
 
 // a/b - c/d  == (ad - bc)/bd
 const RationalNumerics operator-(RationalNumerics left, const RationalNumerics& right)
 {
+	BigInteger leftNumerator = left._numerator * right._denominator;
+	BigInteger rightNumerator = left._denominator * right._numerator;
 
-	return RationalNumerics((left._numerator * right._denominator) - (left._denominator * right._numerator),
-		left._denominator * right._denominator);
+	if (left._sign == -1)
+	{
+		leftNumerator = -leftNumerator;
+	}
+	if (right._sign == -1)
+	{
+		rightNumerator = -rightNumerator;
+	}
+
+	return RationalNumerics(leftNumerator - rightNumerator, left._denominator * right._denominator);
 }
 
 // a/b * c/d  == (ac)/(bd)
-const RationalNumerics operator*(RationalNumerics left, const RationalNumerics& rigth)
+const RationalNumerics operator*(RationalNumerics left, const RationalNumerics& right)
 {
-	return RationalNumerics((left._numerator * rigth._numerator), (left._denominator * rigth._denominator));
+	BigInteger numerator = left._numerator * right._numerator;
+	numerator = left._sign != right._sign ? -numerator : numerator;
+	return RationalNumerics(numerator, (left._denominator * right._denominator));
 }
 
 // a/b / c/d  == (ad)/(bc)
-const RationalNumerics operator/(RationalNumerics left, const RationalNumerics& rigth)
+const RationalNumerics operator/(RationalNumerics left, const RationalNumerics& right)
 {
-	return RationalNumerics((left._numerator * rigth._denominator), (left._denominator * rigth._numerator));
+	BigInteger numerator = left._numerator * right._denominator;
+	numerator = left._sign != right._sign ? -numerator : numerator;
+	return RationalNumerics(numerator, (left._denominator * right._numerator));
 }
 
 // a/b % c/d  == (ad % bc)/bd
-const RationalNumerics operator%(RationalNumerics left, const RationalNumerics& rigth)
+const RationalNumerics operator%(RationalNumerics left, const RationalNumerics& right)
 {
-	return RationalNumerics((left._numerator * rigth._denominator) % (left._denominator * rigth._numerator), (left._denominator * rigth._denominator));
+	BigInteger leftNumerator = left._numerator * right._denominator;
+	BigInteger rightNumerator = left._denominator * right._numerator;
+
+	if (left._sign == -1)
+	{
+		leftNumerator = -leftNumerator;
+	}
+	if (right._sign == -1)
+	{
+		rightNumerator = -rightNumerator;
+	}
+	return RationalNumerics(leftNumerator % rightNumerator, (left._denominator * right._denominator));
+}
+
+RationalNumerics RationalNumerics::operator=(RationalNumerics number)
+{
+	this->_numerator = number._numerator;
+	this->_denominator = number._denominator;
+	this->_sign = number._sign;
+	return *this;
 }
 
 ostream& operator<<(ostream& os, const RationalNumerics& rn)

@@ -118,7 +118,6 @@
     <ClCompile Include="BigInteger.cpp" />
     <ClCompile Include="ClientNumber.cpp" />
     <ClCompile Include="ExponentialNotation.cpp" />
-    <ClCompile Include="FormulaManager.cpp" />
     <ClCompile Include="FormulaRecognition.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RationalNumerics.cpp" />

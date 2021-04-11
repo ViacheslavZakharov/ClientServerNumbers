@@ -363,7 +363,7 @@ BigInteger::BigInteger(unsigned short s)
 BigInteger::BigInteger(signed int i) {
 	if (i < 0)
 	{
-		this->_sign = 1;
+		this->_sign = -1;
 	}
 	else if (i > 0)
 	{

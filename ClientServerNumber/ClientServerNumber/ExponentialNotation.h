@@ -24,6 +24,9 @@ public:
 	// Получает нецелую часть мантиссы.
 	BigInteger GetSignificandNotWholePart();
 
+	// Получает степень.
+	int GetExponent();
+
 	// Получает текущую точность.
 	int GetCurrentCountDigitsNotWhole();
 
