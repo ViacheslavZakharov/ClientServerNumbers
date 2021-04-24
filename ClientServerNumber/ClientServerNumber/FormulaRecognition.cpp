@@ -16,12 +16,46 @@ StackList<ClientNumber> FormulaRecognition::Calculate(string formula)
 		if (FormulaRecognition::IsDigit(formula[i]))
 		{
 			int startIndexDigit = i;
-			while (FormulaRecognition::IsDigit(formula[i]))
+			string digitsBeforePeriodWhole = "";
+			string digitsBeforePeriodNotWhole = "";
+			string period = "";
+			bool isPeriodNumber = false;
+			int indexStartNotWholeDigitsBeforePeriod = 0;
+			int indexStartPeriod = 0;
+			while (FormulaRecognition::IsDigit(formula[i]) || (i < formula.length() && isPeriodNumber))
 			{
+				if (i + 1 != formula.length() && IsSeporatorNotWholePart(formula[i + 1])) 
+				{
+					isPeriodNumber = true;
+				}
+				else if (IsSeporatorNotWholePart(formula[i]))
+				{
+					digitsBeforePeriodWhole = formula.substr(startIndexDigit, i - startIndexDigit);
+					indexStartNotWholeDigitsBeforePeriod = i + 1;
+				}
+				else if (IsSeporatorPeriodStart(formula[i]))
+				{
+					digitsBeforePeriodNotWhole = formula.substr(indexStartNotWholeDigitsBeforePeriod, i - indexStartNotWholeDigitsBeforePeriod);
+					indexStartPeriod = i + 1;
+				}
+				else if (IsSeporatorPeriodEnd(formula[i])) 
+				{
+					period = formula.substr(indexStartPeriod, i - indexStartPeriod);
+					isPeriodNumber = false;
+				}
+
 				i++;
 			}
-			BigInteger numberBI = BigInteger(formula.substr(startIndexDigit, i - startIndexDigit));
-			ServerRationalNumber serverRationalNumber = ServerRationalNumber(RationalNumerics(numberBI, BigInteger(1)));
+
+			ServerRationalNumber serverRationalNumber = ServerRationalNumber();
+			// Если число задано в виде a,b(c).
+			if (period != "") {
+				serverRationalNumber = ServerRationalNumber(digitsBeforePeriodWhole, digitsBeforePeriodNotWhole, period);
+			}
+			else {
+				string numerator = formula.substr(startIndexDigit, i - startIndexDigit);
+				serverRationalNumber = ServerRationalNumber(numerator);
+			}
 			serverRationalNumbersStack.Push(serverRationalNumber);
 			i--;
 		}
@@ -68,13 +102,33 @@ bool FormulaRecognition::IsDigit(char c)
 	return (c >= '0'&& c <= '9');
 }
 
+bool FormulaRecognition::IsNumberOrNumberPart(char c)
+{
+	return IsDigit(c) || IsSeporatorNotWholePart(c) || IsSeporatorPeriodStart(c) || IsSeporatorPeriodEnd(c);
+}
+
+bool FormulaRecognition::IsSeporatorNotWholePart(char c)
+{
+	return c == ',' || c == '.';
+}
+
+bool FormulaRecognition::IsSeporatorPeriodStart(char c)
+{
+	return c == '(';
+}
+
+bool FormulaRecognition::IsSeporatorPeriodEnd(char c)
+{
+	return c == ')';
+}
+
 string FormulaRecognition::ClearBadSymbolsInFormula(string formula)
 {
 	string strResult = "";
 	for (auto i = 0; i < formula.length(); i++)
 	{
 		char symbol = formula[i];
-		if (IsArithmeticOperator(symbol) || IsDigit(symbol))
+		if (IsArithmeticOperator(symbol) || IsNumberOrNumberPart(symbol))
 			strResult += symbol;
 	}
 	return strResult;
@@ -90,19 +144,47 @@ int FormulaRecognition::Prior(char c)
 	}
 }
 
-string FormulaRecognition::GetFormulaElement(string str, int startIndex)
+string FormulaRecognition::GetNumberOrOperation(string str, int startIndex)
 {
 	string formulaElement = "";
 	char symbol = str[startIndex];
-	while (FormulaRecognition::IsDigit(symbol) && startIndex < str.length())
+	// Флаги для проверки целостности, если число будет задано в виде a,b(c).
+	bool wasSeporatatorNotWhole = false;
+	bool wasSeporatorStartPeriod = false;
+	bool wasSeporatorEndPeriod = false;
+	bool isPeriodNumber = false;
+	while ((IsDigit(symbol) || isPeriodNumber) && startIndex < str.length())
 	{
 		formulaElement += symbol;
+		// Проверим является ли следующий символ частью периодического числа a,b(c).
+		if (startIndex + 1 < str.length() && IsSeporatorNotWholePart(str[startIndex + 1])) {
+			isPeriodNumber = true;
+		}
+		else if (IsSeporatorNotWholePart(symbol)) {
+			wasSeporatatorNotWhole = true;
+		}
+		else if (IsSeporatorPeriodStart(symbol)) {
+			wasSeporatorStartPeriod = true;
+		}
+		else if (IsSeporatorPeriodEnd(symbol)) {
+			wasSeporatorEndPeriod = true;
+			isPeriodNumber = false;
+		}
+
 		symbol = str[++startIndex];
 	}
+	// Если все флаги находятся не в одинаковом состоянии, считаем, что синтаксис некорректный
+	if (!(!wasSeporatatorNotWhole && !wasSeporatorStartPeriod && !wasSeporatorEndPeriod
+		|| wasSeporatatorNotWhole && wasSeporatorStartPeriod && wasSeporatorEndPeriod))
+	{
+		throw "Формула имеет некорректный формат.";
+	}
+	// Если это не число, то это должна быть операция.
 	if (formulaElement.length() == 0)
 	{
 		formulaElement += symbol;
 	}
+
 	return formulaElement;
 }
 
@@ -120,7 +202,7 @@ string FormulaRecognition::ConvertPPN(string formulaString)
 	int openAndCloseBrackets = 0;
 	bool wasOperation = false;
 	while (charIndex != formulaString.length()) {
-		string formulaElement = FormulaRecognition::GetFormulaElement(formulaString, charIndex);
+		string formulaElement = FormulaRecognition::GetNumberOrOperation(formulaString, charIndex);
 		if (formulaElement.length() > 1 || IsDigit(formulaElement[0]))
 		{
 			resultString += formulaElement + " ";

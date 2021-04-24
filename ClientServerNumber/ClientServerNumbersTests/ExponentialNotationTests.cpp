@@ -115,8 +115,8 @@ namespace ClientServerNumbersTests
 
 #pragma region Minus / Tests
 
-		static const int CONVERT_PPN_TEST_CASE_COUNT = 9;
-		string testCaseForMinus[CONVERT_PPN_TEST_CASE_COUNT][6] =
+		static const int MINUS_TEST_CASE_COUNT = 9;
+		string testCaseForMinus[MINUS_TEST_CASE_COUNT][6] =
 		{
 			{"53834", "1000", "38401", "1000", "1,5433 * 10^1", "3"}, // 53,834 - 38,401 = 15,433
 			{"4827", "100", "38407", "1000", "9,863", "3"}, // 48,27 - 38,407 = 9,863
@@ -132,7 +132,7 @@ namespace ClientServerNumbersTests
 		TEST_METHOD(MinusOperator_CorrectData_CorrectResult)
 		{
 			ExponentialNotation result = ExponentialNotation();
-			for (int i = 0; i < CONVERT_PPN_TEST_CASE_COUNT; i++) {
+			for (int i = 0; i < MINUS_TEST_CASE_COUNT; i++) {
 				result = GetExponentialNotation(testCaseForMinus[i][0], testCaseForMinus[i][1],
 					testCaseForMinus[i][5])
 					- GetExponentialNotation(testCaseForMinus[i][2], testCaseForMinus[i][3], testCaseForMinus[i][5]);
@@ -142,7 +142,105 @@ namespace ClientServerNumbersTests
 
 #pragma endregion
 
-	private:
+#pragma region GetRationalNumberFromPeriod
+
+		static const int RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT = 8;
+		string testCaseForRationalNumberFromPeriod[RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT][5] =
+		{								 
+			{"56", "8", "3", "5", "5,683333 * 10^1"}, // 56,8(3) точность 5 = 5,683333 * 10^1
+			{"5782", "365", "447", "10", "5,7823654474474 * 10^3"}, // проверка с большим периодом и большим количеством чисел перед периодом.
+			{"5782", "365", "457", "10", "5,7823654574575 * 10^3"}, // доп проверка с округлением последнего.
+			{"506", "7", "3", "5", "5,0673333 * 10^2"}, // проверка с 0 в целой части переходящим в нецелую.
+			{"5", "0", "3", "5", "5,03333"}, // 5,0(3) проверка с 0 в цифрах перед периодом.
+			{"5", "0000", "3", "10", "5,0000333333"}, // 5,0(3) проверка с 0 в цифрах перед периодом.
+			{"5", "", "3", "5", "5,33333"}, // 5,(3) проверка с пустой строкой в цифрах перед периодом.
+			{"5", "", "012", "5", "5,01201"} // 5,(012) проверка с пустой строкой в цифрах перед периодом и нулем в периоде.
+		};
+
+		TEST_METHOD(GetRationalNumberFromPeriod_CorrectData_CorrectResult)
+		{
+			for (int i = 0; i < RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT; i++) 
+			{
+				int accuracy = atoi(testCaseForRationalNumberFromPeriod[i][3].c_str());
+				ExponentialNotation expWithPeriod = ExponentialNotation(testCaseForRationalNumberFromPeriod[i][0],
+					testCaseForRationalNumberFromPeriod[i][1], testCaseForRationalNumberFromPeriod[i][2], accuracy);
+				// Проверяем, что создалось корректное экспоненциальное число.
+				Assert::AreEqual(string(testCaseForRationalNumberFromPeriod[i][4]), expWithPeriod.ToString());
+				RationalNumerics rn = expWithPeriod.GetRationalNumberFromPeriod();
+				// Создадим из получившегося рационального числа экспоненциальное и проверим, что результаты совпадают.
+				ExponentialNotation newExpNotation = ExponentialNotation(rn, accuracy);
+				Assert::AreEqual(string(testCaseForRationalNumberFromPeriod[i][4]), newExpNotation.ToString());
+			}
+		}
+
+#pragma endregion
+
+#pragma region ConstructorFromPeriod
+
+		static const int CONSTRUCTOR_FROM_PERIOD_TEST_CASE_COUNT = 25;
+		string testCaseForConstructorFromPeriod[CONSTRUCTOR_FROM_PERIOD_TEST_CASE_COUNT][7] =
+		{//Целая=0 | До периода=пусто | Период=с нулями		| Еще проверим, что _digitsBeforePeriod и _countDigitsBeforePeriod имеют корректные значения.
+			{"0", "", "003", "9", "3,003003 * 10^-3",			"0", "0"}, // 0,(003) точность 9 = 3,003003 * 10^-3
+			{"0", "", "0031", "11", "3,10031003 * 10^-3",		"1", "1"}, // 0,(0031) точность 10 = 3,10031003 * 10^-3
+		 //Целая=0 | До периода=пусто | Период=без нулей
+			{"0", "", "3", "8", "3,3333333 * 10^-1",			"0", "0"}, // 0,(3) точность 8 = 3,3333333 * 10^-1
+			{"0", "", "3123", "11", "3,1233123312 * 10^-1",		"123", "3"}, // 0,(3123) точность 11 = 3,1233123312 * 10^-1
+		 //Целая=0 | До периода=нули | Период=с нулями	
+			{"0", "00", "003", "12", "3,0030030 * 10^-5",		"0", "0"}, // 0,00(003) точность 12 = 3,0030030 * 10^-4
+			{"0", "00", "03170", "15", "3,17003170032 * 10^-4",	"170", "3"}, // 0,00(03170) точность 15 = 3,17003170031 * 10^-4
+		 //Целая=0 | До периода=нули | Период=без нулей
+			{"0", "00", "3", "7", "3,3333 * 10^-3",				"0", "0"}, // 0,00(3) точность 7 = 3,3333 * 10^-3
+			{"0", "000", "317", "11", "3,1731732 * 10^-4",		"17", "2"}, // 0,000(317) точность 11 = 3,1731732 * 10^-4
+		 //Целая=0 | До периода=с нулями | Период=с нулями
+			{"0", "020", "03", "9", "2,0030303 * 10^-2",		"0", "1"}, // 0,020(03) точность 9 = 2,0030303 * 10^-2
+			{"0", "0270", "0317", "11", "2,700317032 * 10^-2",	"70", "2"}, // 0,0270(0317) точность 11 = 2,700317032 * 10^-2
+		 //Целая=0 | До периода=с нулями | Период=без нулей
+			{"0", "020", "3", "6", "2,0333 * 10^-2",			"0", "1"}, // 0,020(3) точность 6 = 2,0333 * 10^-2
+			{"0", "0270", "317", "9", "2,7031732 * 10^-2",		"70", "2"}, // 0,0270(317) точность 9 = 2,7031732 * 10^-2
+		 //Целая=0 | До периода=без нулей | Период=с нулями
+			{"0", "20", "03", "8", "2,0030303 * 10^-1",			"0", "1"}, // 0,20(03) точность 8 = 2,0030303 * 10^-1
+			{"0", "275", "0317", "10", "2,750317032 * 10^-1",	"75", "2"}, // 0,275(0317) точность 10 = 2,750317032 * 10^-1
+		 //Целая=0 | До периода=без нулей | Период=без нулей
+			{"0", "27", "38", "7", "2,738384 * 10^-1",			"7", "1"}, // 0,27(38) точность 7 = 2,738384 * 10^-1
+		 //Целая != 0 | До периода=пусто | Период=с нулями
+			{"5", "", "003", "6", "5,003003",					"0", "0"}, // 5,(003) точность 6 = 5,003003
+			{"50", "", "0317", "7", "5,00317032 * 10^1",		"0", "1"}, // 50,(0317) точность 7 = 5,00317032 * 10^1
+			{"501", "", "0317", "7", "5,010317032 * 10^2",		"01", "2"}, // 501,(0317) точность 7 = 5,010317032 * 10^2
+		 //Целая != 0 | До периода=пусто | Период=без нулей
+			{"50", "", "37", "6", "5,0373737 * 10^1",			"0", "1"}, // 50,(37) точность 6 = 5,0373737 * 10^1
+		 //Целая != 0 | До периода=нули | Период=с нулями
+			{"5", "00", "003", "8", "5,00003003",				"0", "2"}, // 5,00(003) точность 8 = 5,00003003
+		 //Целая != 0 | До периода=нули | Период=без нулей
+			{"5", "00", "37", "7", "5,0037374",					"0", "2"}, // 5,00(37) точность 7 = 5,0037374
+		 //Целая != 0 | До периода=с нулями | Период=с нулями
+			{"5", "021", "037", "9", "5,021037037",				"021", "3"}, // 5,021(037) точность 9 = 5,021037037
+		 //Целая != 0 | До периода=с нулями | Период=без нулей
+			{"5", "021", "37", "7", "5,0213737",				"021", "3"}, // 5,021(37) точность 7 = 5,0213737
+		 //Целая != 0 | До периода=без нулей | Период=с нулями
+			{"5", "21", "037", "7", "5,2103704",				"21", "2"}, // 5,21(037) точность 7 = 5,2103704
+		 //Целая != 0 | До периода=без нулей | Период=без нулей
+			{"5", "21", "37", "6", "5,213737",					"21", "2"}, // 5,21(37) точность 6 = 5,213737
+		};
+
+		TEST_METHOD(ConstructorFromPeriod_CorrectData_CorrectResult)
+		{
+			for (int i = 0; i < CONSTRUCTOR_FROM_PERIOD_TEST_CASE_COUNT; i++)
+			{
+				int accuracy = atoi(testCaseForConstructorFromPeriod[i][3].c_str());
+				ExponentialNotation expWithPeriod = ExponentialNotation(testCaseForConstructorFromPeriod[i][0],
+					testCaseForConstructorFromPeriod[i][1], testCaseForConstructorFromPeriod[i][2], accuracy);
+				// Проверяем, что создалось корректное экспоненциальное число.
+				Assert::AreEqual(string(testCaseForConstructorFromPeriod[i][4]), expWithPeriod.ToString());
+				// Проверяем, что составляющие части периода также имеют корректные значения.
+				Assert::AreEqual(string(testCaseForConstructorFromPeriod[i][2]), expWithPeriod.GetPeriod().ToString());
+				Assert::AreEqual(string(testCaseForConstructorFromPeriod[i][5]), expWithPeriod.GetDigitsBeforePeriod().ToString());
+				Assert::AreEqual(string(testCaseForConstructorFromPeriod[i][6]), to_string(expWithPeriod.GetCountDigitsBeforePeriod()));
+			}
+		}
+
+#pragma endregion
+
+private:
 
 		// Получает число в экспоненциальной форме из числителя и знаменателя.
 		ExponentialNotation GetExponentialNotation(string numerator, string denominator, string accuracyStr)

@@ -17,6 +17,8 @@ public:
 	ServerRationalNumber(RationalNumerics rationalNumeric);
 	ServerRationalNumber(string numerator, string denominator);
 	ServerRationalNumber(string numerator);
+	// Конструктор, позволяющий задать число с помощью тройки чисел a,b(c). Предполагается, что число является положительным.
+	ServerRationalNumber(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole, string period);
 	ServerRationalNumber(ExponentialNotation exponentialNumber, RationalNumerics rationalNumber, int countDigitsNotWhole);
 
 	friend bool operator ==(const ServerRationalNumber&, const ServerRationalNumber&);
@@ -63,7 +65,4 @@ private:
 
 	// Получает результат бинарной операции.
 	static ServerRationalNumber GetOperationResult(Operation op, ServerRationalNumber left, ServerRationalNumber right);
-
-	// Получает текущую точность числа до количества переданных чисел.
-	//BigInteger SetCurrentAccuracy(int countDigits);
 };

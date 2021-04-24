@@ -8,8 +8,10 @@ ExponentialNotation::ExponentialNotation()
 	_significandNotWhole = 0;
 	_currentCountDigitsNotWhole = 0;
 	_maxCountDigitsNotWholePart = 0;
+
 	_digitsBeforePeriod = 0;
 	_period = 0;
+	_countDigitsBeforePeriod = 0;
 }
 
 ExponentialNotation::ExponentialNotation(RationalNumerics rationalNumeric, int accuracy)
@@ -20,8 +22,11 @@ ExponentialNotation::ExponentialNotation(RationalNumerics rationalNumeric, int a
 	_significandNotWhole = 0;
 	_currentCountDigitsNotWhole = accuracy;
 	_maxCountDigitsNotWholePart = accuracy;
+
 	_digitsBeforePeriod = 0;
 	_period = 0;
+	_countDigitsBeforePeriod = 0;
+
 	ReformToExponentialNotation(rationalNumeric);
 }
 
@@ -34,8 +39,106 @@ ExponentialNotation::ExponentialNotation(int sign, int significandWhole, BigInte
 	_exponent = exponent;
 	_currentCountDigitsNotWhole = currentCountDigitsNotWhole;
 	_maxCountDigitsNotWholePart = maxCountDigitsNotWholePart;
+
 	_digitsBeforePeriod = 0;
 	_period = 0;
+	_countDigitsBeforePeriod = 0;
+}
+
+ExponentialNotation::ExponentialNotation(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole,
+	string period, int accuracy)
+{
+	if (period == "")
+	{
+		throw "Период у числа не задан, невозможно определить экспоненциальную запись числа.";
+	}
+
+	if (digitsBeforePeriodWhole == "")
+	{
+		throw "Некорректно задано число через период, невозможно определить экспоненциальную запись числа.";
+	}
+
+	int countDigitsBeforePeriod = digitsBeforePeriodNotWhole.length();
+	int significandWhole = 0;
+	int countZerroInStartBeforeWhole = ExponentialNotation::GetCountZerrosInStartStr(digitsBeforePeriodNotWhole);
+	int exponent = 0;
+	// Проверим если число < 1, то надо передвинуть цифры, чтобы целая часть была от 1 до 9 и скорректировать степень и другие составляющие числа.
+	bool isWholeZerroNotWholeOnlyZerros = digitsBeforePeriodWhole == "0" && countDigitsBeforePeriod != 0 && countZerroInStartBeforeWhole == countDigitsBeforePeriod;
+	bool isWholeZerroNotWholeEmpty = digitsBeforePeriodWhole == "0" && countDigitsBeforePeriod == 0;
+	bool isWholeZerroNotWholeNotOnlyZerros = digitsBeforePeriodWhole == "0" && countDigitsBeforePeriod != 0 && countZerroInStartBeforeWhole != countDigitsBeforePeriod;
+	if (isWholeZerroNotWholeOnlyZerros)
+	{
+		exponent = exponent - countZerroInStartBeforeWhole;
+	}
+	if (isWholeZerroNotWholeEmpty || isWholeZerroNotWholeOnlyZerros)
+	{
+		countZerroInStartBeforeWhole = ExponentialNotation::GetCountZerrosInStartStr(period);
+		exponent = exponent - countZerroInStartBeforeWhole - 1;
+		significandWhole = atoi(period.substr(countZerroInStartBeforeWhole, 1).c_str());
+		digitsBeforePeriodNotWhole = period.substr(countZerroInStartBeforeWhole + 1, period.length() - countZerroInStartBeforeWhole - 1);
+	}
+	else if (isWholeZerroNotWholeNotOnlyZerros)
+	{
+		exponent = exponent - countZerroInStartBeforeWhole - 1;
+		significandWhole = atoi(digitsBeforePeriodNotWhole.substr(countZerroInStartBeforeWhole, 1).c_str());
+		// Отрежим все лишние нули, т.к. они уже учтены в степени.
+		digitsBeforePeriodNotWhole = digitsBeforePeriodNotWhole.substr(countZerroInStartBeforeWhole + 1, digitsBeforePeriodNotWhole.length() - countZerroInStartBeforeWhole - 1);
+		
+	}
+	else if (digitsBeforePeriodWhole != "0")
+	{
+		significandWhole = atoi(digitsBeforePeriodWhole.substr(0, 1).c_str());
+		string extraNotWhole = digitsBeforePeriodWhole.substr(1, digitsBeforePeriodWhole.length() - 1); // Если строка меньше длиной, то вернется пустая строка.
+		exponent = extraNotWhole.length();
+		digitsBeforePeriodNotWhole = extraNotWhole + digitsBeforePeriodNotWhole;
+	}
+
+	SetExponentialNotationFieldsFromPeriod(significandWhole, digitsBeforePeriodNotWhole, period, accuracy, exponent, digitsBeforePeriodNotWhole.length(), 1);
+}
+
+void ExponentialNotation::SetExponentialNotationFieldsFromPeriod(int wholePart, string digitsBeforePeriodNotWhole, string period,
+	int accuracy, int exponent, int countDigitsBeforePeriod, int sign)
+{
+	string significandNotWhole = digitsBeforePeriodNotWhole.substr(0, accuracy + exponent);
+	// Добавим цифр для нецелой части если неоходимо из периода. Для этого определим сколько необходимо цифр периода.
+	int countAdditionalNotWholeDigits = accuracy - significandNotWhole.length() + exponent;
+	if (countAdditionalNotWholeDigits != 0)
+	{
+		// Если длина периодической части меньше, чем необходимо цифр,
+		// то сгенерируем на основании периода столько сколько необходимо цифр.
+		string additionalDigits = period;
+		while (additionalDigits.length() < countAdditionalNotWholeDigits)
+		{
+			additionalDigits += period;
+		}
+
+		significandNotWhole += additionalDigits;
+	}
+
+	// Инициализируем все поля.
+	_sign = 1;
+	_significandWhole = wholePart;
+	_significandNotWhole = BigInteger(significandNotWhole);
+	int countZerroBeforeNotWhole = GetCountZerrosInStartStr(significandNotWhole);
+	if (_significandNotWhole != 0)
+	{
+		_significandNotWhole.SetZerrosInStart(countZerroBeforeNotWhole);
+		_significandNotWhole = BigInteger::CutMathematic(_significandNotWhole, accuracy + exponent);
+	}
+	_exponent = exponent;
+	_currentCountDigitsNotWhole = accuracy;
+	_maxCountDigitsNotWholePart = accuracy;
+	// Заполняем часть относящуюся к периоду.
+	countZerroBeforeNotWhole = GetCountZerrosInStartStr(digitsBeforePeriodNotWhole);
+	_digitsBeforePeriod = BigInteger(digitsBeforePeriodNotWhole);
+	_period = BigInteger(period);
+	if (_digitsBeforePeriod != 0) {
+		_digitsBeforePeriod.SetZerrosInStart(countZerroBeforeNotWhole);
+	}
+
+	countZerroBeforeNotWhole = GetCountZerrosInStartStr(period);
+	_period.SetZerrosInStart(countZerroBeforeNotWhole);
+	_countDigitsBeforePeriod = countDigitsBeforePeriod;
 }
 
 int ExponentialNotation::Sign()
@@ -74,6 +177,11 @@ string ExponentialNotation::ToString(bool withPeriod)
 	return resultString;
 }
 
+bool ExponentialNotation::DoesExistsPeriodNumber()
+{
+	return _period != 0;
+}
+
 int ExponentialNotation::GetSignificandWholePart()
 {
     return _significandWhole;
@@ -97,6 +205,57 @@ int ExponentialNotation::GetCurrentCountDigitsNotWhole()
 int ExponentialNotation::GetMaxCountDigitsNotWhole()
 {
 	return _maxCountDigitsNotWholePart;
+}
+
+BigInteger ExponentialNotation::GetDigitsBeforePeriod()
+{
+	return _digitsBeforePeriod;
+}
+
+BigInteger ExponentialNotation::GetPeriod()
+{
+	return _period;
+}
+
+int ExponentialNotation::GetCountDigitsBeforePeriod()
+{
+	return _countDigitsBeforePeriod;
+}
+
+RationalNumerics ExponentialNotation::GetRationalNumberFromPeriod()
+{
+	if (_period == 0)
+	{
+		return RationalNumerics();
+	}
+
+	string digitsBeforePeriod = "";
+	if (_digitsBeforePeriod != 0)
+	{
+		digitsBeforePeriod = _digitsBeforePeriod.ToString();
+	}
+	// Если есть один или больше нулей перед периодом, то добавим их.
+	else if (_digitsBeforePeriod == 0 && _countDigitsBeforePeriod != 0) 
+	{
+		digitsBeforePeriod = string(_countDigitsBeforePeriod, '0');
+	}
+
+	string numerator = to_string(_significandWhole) + digitsBeforePeriod;
+	string period = _period.ToString();
+	while (numerator.length() < RationalNumerics::MAX_LENGTH_NUMERATOR)
+	{
+		// Если при прибавлении периода длина будет больше чем максимальная точность, то на до взять часть периода.
+		if (numerator.length() + period.length() - 1 - _exponent > RationalNumerics::MAX_LENGTH_NUMERATOR)
+		{
+			string periodPart = period.substr(0, period.length() - (RationalNumerics::MAX_LENGTH_NUMERATOR + _exponent + 1 - numerator.length()));
+			numerator += periodPart;
+			continue;
+		}
+		numerator += period;
+	}
+
+	string denominator = "1" + string(RationalNumerics::MAX_LENGTH_NUMERATOR - _exponent - 1, '0');
+	return RationalNumerics(numerator, denominator);
 }
 
 void ExponentialNotation::ReformToExponentialNotation(RationalNumerics rational)
@@ -163,16 +322,6 @@ BigInteger ExponentialNotation::GetBigIntegerFromExponential(ExponentialNotation
 	return BigInteger(resultString);
 }
 
-int ExponentialNotation::GetAccuracy(ExponentialNotation number, ExponentialNotation idealNumber)
-{
-	ExponentialNotation diff = ExponentialNotation::Abs(idealNumber) - ExponentialNotation::Abs(number);
-	if (diff.Sign() == 0) {
-		return number.GetMaxCountDigitsNotWhole();
-	}
-	int accuracy = std::abs(diff._exponent) - 1;
-	return accuracy;
-}
-
 ExponentialNotation ExponentialNotation::operator=(ExponentialNotation number)
 {
 	this->_significandNotWhole = number._significandNotWhole;
@@ -181,8 +330,10 @@ ExponentialNotation ExponentialNotation::operator=(ExponentialNotation number)
 	this->_sign = number._sign;
 	this->_currentCountDigitsNotWhole = number._currentCountDigitsNotWhole;
 	this->_maxCountDigitsNotWholePart = number._maxCountDigitsNotWholePart;
+
 	this->_digitsBeforePeriod = number._digitsBeforePeriod;
 	this->_period = number._period;
+	this->_countDigitsBeforePeriod = number._countDigitsBeforePeriod;
 	return *this;
 }
 
@@ -492,7 +643,6 @@ const ExponentialNotation operator*(const ExponentialNotation& left, const Expon
 	}
 
 	// Определим результирующую точность как большую из левого и правого.
-	// TODO: Подумать над правильностью этого действия.
 	int currentCountDigitsNotWhole = std::max(l._maxCountDigitsNotWholePart, r._maxCountDigitsNotWholePart);
 	int maxCountDigitsNotWholePart = currentCountDigitsNotWhole;
 	ExponentialNotation result = ExponentialNotation(sign, wholeSignificand, notWholeSignificand, resultExponent,

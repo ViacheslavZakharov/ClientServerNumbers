@@ -138,7 +138,11 @@ public:
         return _pTop->item;
     }
 
+    // Возвращает хвост стека.
     NodeStack<T>* GetPTail(){ return _pTail; }
+
+    // Возвращает голову стека.
+    NodeStack<T>* GetPTop() { return _pTop; }
 
 private:
     // Указатель на вершину стека.

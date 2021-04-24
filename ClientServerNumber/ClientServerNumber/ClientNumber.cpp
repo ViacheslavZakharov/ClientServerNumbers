@@ -53,19 +53,11 @@ ServerRationalNumber ClientNumber::CalculateResultOperation(ServerRationalNumber
 	}
 }
 
-void ClientNumber::IncreaseAccuracyResult(int numberDigits)
+void ClientNumber::SetAccuracyResult(int numberDigits)
 {
-	//_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetCurrentCountDigitsNotWhole() + 1);
-	//_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetCurrentCountDigitsNotWhole() + 1);
-	// TODO: Сделать проверку, если точность уже нельзя увеличить, иначе сейчас будут просто добавляться нолики.
-	_s1 = ServerRationalNumber(_s1.GetRationalNumber(), _s1.GetMaxCountDigitsNotWhole() + numberDigits);
-	_s2 = ServerRationalNumber(_s2.GetRationalNumber(), _s2.GetMaxCountDigitsNotWhole() + numberDigits);
+	_s1 = GetServerRationalNumberWithNewAccuracy(_s1, numberDigits);
+	_s2 = GetServerRationalNumberWithNewAccuracy(_s2, numberDigits);
 	_resultOperation = CalculateResultOperation(_s1, _s2, _operation);
-}
-
-int ClientNumber::GetAccuracy()
-{
-	return ExponentialNotation::GetAccuracy(_resultOperation.GetExponentionNumber(), _accurateExponentialNumber);
 }
 
 ServerRationalNumber ClientNumber::GetResultOperation()
@@ -115,7 +107,27 @@ ClientNumber::~ClientNumber()
 
 void ClientNumber::CalculateAccurateNumber()
 {
-	_accurateExponentialNumber = ExponentialNotation(_resultOperation.GetRationalNumber(), MAX_ACCURACY);
+	_accurateExponentialNumber = ExponentialNotation(_resultOperation.GetRationalNumber(), ExponentialNotation::MAX_ACCURACY);
+}
+
+ServerRationalNumber ClientNumber::GetServerRationalNumberWithNewAccuracy(ServerRationalNumber srn, int accuracy)
+{
+	ExponentialNotation exp1 = srn.GetExponentionNumber();
+	if (exp1.DoesExistsPeriodNumber()) {
+		RationalNumerics rn = srn.GetRationalNumber();
+		int significandWhole = exp1.GetSignificandWholePart();
+		string digitsBeforePeriod = exp1.GetDigitsBeforePeriod().ToString();
+		string period = exp1.GetPeriod().ToString();
+		int countDigitsBeforePeriod = exp1.GetCountDigitsBeforePeriod();
+		exp1.SetExponentialNotationFieldsFromPeriod(significandWhole, digitsBeforePeriod, period, accuracy,
+			exp1.GetExponent(), countDigitsBeforePeriod, exp1.Sign());
+		srn = ServerRationalNumber(exp1, rn, accuracy);
+	}
+	else {
+		srn = ServerRationalNumber(srn.GetRationalNumber(), accuracy);
+	}
+
+	return srn;
 }
 
 ostream& operator<<(ostream& os, const ClientNumber& number)

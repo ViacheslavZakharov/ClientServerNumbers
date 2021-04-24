@@ -4,6 +4,8 @@
 class RationalNumerics
 {
 public:
+	// Максимальная длина числителя.
+	static const int MAX_LENGTH_NUMERATOR = 100;
 
 	RationalNumerics();
 	// Конструктор, принимающий числитель и знаменатель.

@@ -13,12 +13,9 @@ public:
 
 	ClientNumber operator=(ClientNumber number);
 
-	// Увеличивает точность результата операции путем увеличения точности Серверных чисел.
-	void IncreaseAccuracyResult(int numberDigits);
-
-	// Получает точность числа, как количество знаков до первой значимой цифры 
-	// в разнице результата операции и идеального числа.
-	int GetAccuracy();
+	// Устанавливает точность результата операции на заданное значение,
+	// при необходимости увеличивает или уменьшает точность путем изменения точности Серверных чисел.
+	void SetAccuracyResult(int numberDigits);
 
 	ServerRationalNumber GetResultOperation();
 	ServerRationalNumber GetLeftServerNumber();
@@ -39,9 +36,6 @@ public:
 	~ClientNumber();
 
 private:
-	// Макисмальная точность числа.
-	const int MAX_ACCURACY = 1000;
-
 	ServerRationalNumber _s1;
 	ServerRationalNumber _s2;
 	Operation _operation;
@@ -53,6 +47,8 @@ private:
 
 	// Вычисляет точное значение операции.
 	void CalculateAccurateNumber();
+
+	ServerRationalNumber GetServerRationalNumberWithNewAccuracy(ServerRationalNumber srn, int accuracy);
 
 	// Получает результат операции.
 	ServerRationalNumber CalculateResultOperation(ServerRationalNumber s1,
