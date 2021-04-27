@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../ClientServerNumber/ServerRationalNumber.h"
-#include "../ClientServerNumber/ServerRationalNumber.cpp"
+#include "../ClientServerNumbers/ServerRationalNumber.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

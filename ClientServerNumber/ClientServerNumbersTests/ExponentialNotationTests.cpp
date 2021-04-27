@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <vector>
-#include "../ClientServerNumber/ExponentialNotation.h"
-#include "../ClientServerNumber/ExponentialNotation.cpp"
+#include "../ClientServerNumbers/ExponentialNotation.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

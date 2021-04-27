@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../ClientServerNumber/BigInteger.h"
-#include "../ClientServerNumber/BigInteger.cpp"
+#include "../ClientServerNumbers/BigInteger.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
