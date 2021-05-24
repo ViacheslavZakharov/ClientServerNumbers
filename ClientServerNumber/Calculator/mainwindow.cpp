@@ -41,6 +41,7 @@ void MainWindow::on_formulaCalculatePB_clicked()
         try{
             QString recalculateResult = QString::fromStdString(_formulaManager.GetIncreasedAccuracyResult(accuracy));
             QString formula = ui->formulaTE->toPlainText().split("=")[0];
+            recalculateResult = recalculateResult.mid(0,recalculateResult.indexOf("Accuracy"));
             ui->formulaTE->setText(formula + " = " + recalculateResult);
             setAccuracyResultForFormula(formula, recalculateResult);
         }
@@ -54,6 +55,7 @@ void MainWindow::on_formulaCalculatePB_clicked()
         try{      
             QString formula = ui->formulaTE->toPlainText();
             QString result = QString::fromStdString(_formulaManager.Calculate(formula.toStdString()));
+            result = result.mid(0,result.indexOf("Accuracy"));
             addToFormula(" = " + result);
             setAccuracyResultForFormula(formula, result);
         }
@@ -160,6 +162,7 @@ void MainWindow::setAccuracyResultForFormula(QString formula, QString formulaRes
     auto accuracyString = QString::fromStdString(to_string(realAccuracyResult));
     ui->accuracyResultL->setText("Получившаяся точность результата: " + accuracyString);
     QString previousLog = ui->logTE->toPlainText();
+    formulaResult = formulaResult.mid(0,formulaResult.indexOf("Accuracy"));
     ui->logTE->setText(previousLog + "\n" + formula + " = " + formulaResult + "\nТочность " + accuracyString + "\n");
 }
 
