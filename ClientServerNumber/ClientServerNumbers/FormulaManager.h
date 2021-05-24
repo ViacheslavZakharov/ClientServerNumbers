@@ -22,9 +22,11 @@ public:
 	// Возвращает результат с заданной точностью с помощью регулирования точности дерева операций.
 	string GetIncreasedAccuracyResult(int accuracy) 
 	{
+        // Сбросим текущую точность, чтобы снова ее пересчитать с заданным числом.
+        _realAccuracyResult = 0;
 		// Устанавливаем для всего дерева заданную точность.
 		int tempAccuracy = accuracy;
-		while (_realAccuracyResult <= accuracy)
+        while (_realAccuracyResult < accuracy)
 		{
 			// Если увеличение точности на 10 знаков не позволило прийти к нужному результату, то считаем,
 			// что его уже не достигнуть и выбрасываем исключение.
@@ -33,6 +35,10 @@ public:
 			}
 			SetAccuracyForAllTreeNodes(tempAccuracy);
 			_realAccuracyResult = CalculateRealAccuracyResult();
+            // Если достигли заданной точности, то вернем сразу конечный результат.
+            if(_realAccuracyResult == accuracy){
+                return GetFinalResult();
+            }
 			// Если разница между идеальным и текущим числом равна 0, то значит достигнута максимальная точность.
 			if (_realAccuracyResult == 0) {
 				return GetFinalResult();
@@ -44,14 +50,22 @@ public:
 		// то будем производить последовательное уменьшение точности для дерева начиная с головы.
 		if (_realAccuracyResult > accuracy)
 		{
-			DecreaseAccuracyForTree(accuracy);
+            auto tempTree = _clientNumbersTree;
+            try{
+                DecreaseAccuracyForTree(accuracy);
+            }
+            catch(const char* message){
+                _clientNumbersTree = tempTree;
+                _realAccuracyResult = CalculateRealAccuracyResult();
+                return GetFinalResult();
+            }
 		}
 		if (_realAccuracyResult < accuracy)
 		{
 			throw "Не удалось достигнуть заданной точности!";
 		}
 
-		return GetFinalResult();
+        return GetFinalResult();
 	}
 
 	void PrintTreeResult()
@@ -70,6 +84,10 @@ public:
 		string resultString = topResult.GetResultOperation().ToString();
 		return resultString;
 	}
+
+    bool HasFormula(){
+        return _clientNumbersTree.Count() != 0;
+    }
 
 private:
 	StackList<ClientNumber> _clientNumbersTree;
@@ -146,6 +164,7 @@ private:
 
 				node = node->next;
 			}
+            node = _clientNumbersTree.GetPTop();
 		}
 
 	}

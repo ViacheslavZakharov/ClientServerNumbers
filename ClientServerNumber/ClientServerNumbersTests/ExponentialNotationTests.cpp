@@ -143,7 +143,7 @@ namespace ClientServerNumbersTests
 
 #pragma region GetRationalNumberFromPeriod
 
-		static const int RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT = 8;
+		static const int RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT = 10;
 		string testCaseForRationalNumberFromPeriod[RATIONAL_NUMBER_FROM_PERIOD_TEST_CASE_COUNT][5] =
 		{								 
 			{"56", "8", "3", "5", "5,683333 * 10^1"}, // 56,8(3) точность 5 = 5,683333 * 10^1
@@ -153,7 +153,10 @@ namespace ClientServerNumbersTests
 			{"5", "0", "3", "5", "5,03333"}, // 5,0(3) проверка с 0 в цифрах перед периодом.
 			{"5", "0000", "3", "10", "5,0000333333"}, // 5,0(3) проверка с 0 в цифрах перед периодом.
 			{"5", "", "3", "5", "5,33333"}, // 5,(3) проверка с пустой строкой в цифрах перед периодом.
-			{"5", "", "012", "5", "5,01201"} // 5,(012) проверка с пустой строкой в цифрах перед периодом и нулем в периоде.
+			{"5", "", "012", "5", "5,01201"}, // 5,(012) проверка с пустой строкой в цифрах перед периодом и нулем в периоде.
+			
+			{"513", "", "38", "12", "5,13383838383838 * 10^2"},
+			{"0", "0", "03", "12", "3,030303030 * 10^-3"},
 		};
 
 		TEST_METHOD(GetRationalNumberFromPeriod_CorrectData_CorrectResult)
@@ -162,7 +165,7 @@ namespace ClientServerNumbersTests
 			{
 				int accuracy = atoi(testCaseForRationalNumberFromPeriod[i][3].c_str());
 				ExponentialNotation expWithPeriod = ExponentialNotation(testCaseForRationalNumberFromPeriod[i][0],
-					testCaseForRationalNumberFromPeriod[i][1], testCaseForRationalNumberFromPeriod[i][2], accuracy);
+					testCaseForRationalNumberFromPeriod[i][1], testCaseForRationalNumberFromPeriod[i][2], accuracy, 1);
 				// Проверяем, что создалось корректное экспоненциальное число.
 				Assert::AreEqual(string(testCaseForRationalNumberFromPeriod[i][4]), expWithPeriod.ToString());
 				RationalNumerics rn = expWithPeriod.GetRationalNumberFromPeriod();
@@ -227,7 +230,7 @@ namespace ClientServerNumbersTests
 			{
 				int accuracy = atoi(testCaseForConstructorFromPeriod[i][3].c_str());
 				ExponentialNotation expWithPeriod = ExponentialNotation(testCaseForConstructorFromPeriod[i][0],
-					testCaseForConstructorFromPeriod[i][1], testCaseForConstructorFromPeriod[i][2], accuracy);
+					testCaseForConstructorFromPeriod[i][1], testCaseForConstructorFromPeriod[i][2], accuracy, 1);
 				// Проверяем, что создалось корректное экспоненциальное число.
 				Assert::AreEqual(string(testCaseForConstructorFromPeriod[i][4]), expWithPeriod.ToString());
 				// Проверяем, что составляющие части периода также имеют корректные значения.

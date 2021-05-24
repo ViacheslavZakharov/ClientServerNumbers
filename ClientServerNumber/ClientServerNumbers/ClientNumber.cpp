@@ -89,10 +89,11 @@ ExponentialNotation ClientNumber::GetAccurateExponentialNumber()
 
 string ClientNumber::ToString()
 {
-	return	"\n-------------------------\n ->s1:" + _s1.ToString() +
+    return	"\n-------------------------\n ->s1:" + _s1.ToString() +
 			"\n ->s2:" + _s2.ToString() +
-			"\nОперация:" + ClientNumber::OperationToString(_operation) +
-			"\nРезультат: " + _resultOperation.ToString();
+            "\nOperation:" + ClientNumber::OperationToString(_operation) +
+            "\nResult: " + _resultOperation.ToString() +
+            "\nAccuracy clientNumber = " + to_string(GetRealAccuracyNumber());
 }
 
 int ClientNumber::GetRealAccuracyNumber()
@@ -109,7 +110,7 @@ ClientNumber::~ClientNumber()
 
 void ClientNumber::CalculateAccurateNumber()
 {
-	_accurateExponentialNumber = ExponentialNotation(_resultOperation.GetRationalNumber(), ExponentialNotation::MAX_ACCURACY);
+     _accurateExponentialNumber = ExponentialNotation(_resultOperation.GetRationalNumber(), ExponentialNotation::MAX_ACCURACY);
 }
 
 ServerRationalNumber ClientNumber::GetServerRationalNumberWithNewAccuracy(ServerRationalNumber srn, int accuracy)

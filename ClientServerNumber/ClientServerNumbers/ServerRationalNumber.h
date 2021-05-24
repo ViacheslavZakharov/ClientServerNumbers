@@ -18,7 +18,7 @@ public:
 	ServerRationalNumber(string numerator, string denominator);
 	ServerRationalNumber(string numerator);
 	// Конструктор, позволяющий задать число с помощью тройки чисел a,b(c). Предполагается, что число является положительным.
-	ServerRationalNumber(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole, string period);
+	ServerRationalNumber(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole, string period, int sign);
 	ServerRationalNumber(ExponentialNotation exponentialNumber, RationalNumerics rationalNumber, int countDigitsNotWhole);
 
 	friend bool operator ==(const ServerRationalNumber&, const ServerRationalNumber&);

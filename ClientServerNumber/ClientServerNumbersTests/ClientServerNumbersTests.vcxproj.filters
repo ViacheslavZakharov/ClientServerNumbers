@@ -44,6 +44,9 @@
     <ClCompile Include="FormulaRecognitionTests.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="FormulaManagerTests.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ClientServerNumbersTests.rc">

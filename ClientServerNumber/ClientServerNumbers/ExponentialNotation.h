@@ -16,54 +16,37 @@ public:
 		int exponent, int currentCountDigitsNotWhole, int maxCountDigitsNotWholePart);
 
 	ExponentialNotation(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole,
-		string period, int accuracy);
-
+		string period, int accuracy, int sign);
 	// Знак.
 	int Sign();
-
 	// Приведение к строке в виде нормальной экспоненциальной записи (x (от 0 до 9) ,... * 10^n).
-	string ToString(bool withPeriod = false);
-
+	string ToString();
 	// Проверяет существует ли период у числа.
 	bool DoesExistsPeriodNumber();
-
 	// Получает целую часть мантиссы
 	int GetSignificandWholePart();
-
 	// Получает нецелую часть мантиссы.
 	BigInteger GetSignificandNotWholePart();
-
 	// Получает степень.
 	int GetExponent();
-
 	// Получает текущую точность.
 	int GetCurrentCountDigitsNotWhole();
-
 	// Получает максимальную точность.
 	int GetMaxCountDigitsNotWhole();
-
 	// Получает цифры до периода
 	BigInteger GetDigitsBeforePeriod();
-
 	BigInteger GetPeriod();
-
 	int GetCountDigitsBeforePeriod();
-
 	// Формирует рациональное число из периода.
 	RationalNumerics GetRationalNumberFromPeriod();
-
 	// Преобразовывает к эспоненциалной записи.
 	void ReformToExponentialNotation(RationalNumerics rational);
-
 	// Устанавливает значение всех полей класса с помощью периода. Позволяет повышать точность у экспоненциальных чисел заданных периодом.
 	void SetExponentialNotationFieldsFromPeriod(int wholePart, string digitsBeforePeriodNotWhole, string period,
 		int accuracy, int exponent, int countDigitsBeforePeriod, int sign);
 
 	// Получает модуль числа.
 	static ExponentialNotation Abs(const ExponentialNotation& number);
-
-	// Получает действительную точность числа, сравнивая с идеальным.
-	//static int GetAccuracy(ExponentialNotation number, ExponentialNotation idealNumber);
 
 	ExponentialNotation operator=(ExponentialNotation number);
 	const ExponentialNotation operator -() const;
@@ -125,4 +108,3 @@ private:
 	// Получает результат операция сложения или вычитания.
 	static ExponentialNotation GetOperationResultPlusOrMinus(Operation op, ExponentialNotation left, ExponentialNotation right);
 };
-

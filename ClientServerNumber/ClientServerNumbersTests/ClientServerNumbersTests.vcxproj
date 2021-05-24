@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExponentialNotationTests.cpp" />
+    <ClCompile Include="FormulaManagerTests.cpp" />
     <ClCompile Include="FormulaRecognitionTests.cpp" />
     <ClCompile Include="RationalNumericsTest.cpp" />
     <ClCompile Include="ServerRationalNumberTest.cpp" />

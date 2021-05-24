@@ -27,10 +27,10 @@ ServerRationalNumber::ServerRationalNumber(string numerator) :
 	ServerRationalNumber(RationalNumerics(numerator))
 { }
 
-ServerRationalNumber::ServerRationalNumber(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole, string period)
+ServerRationalNumber::ServerRationalNumber(string digitsBeforePeriodWhole, string digitsBeforePeriodNotWhole, string period, int sign)
 {
 	_exponentialNotation = ExponentialNotation(digitsBeforePeriodWhole, digitsBeforePeriodNotWhole,
-		period, COUNT_DIGITS_NOT_WHOLE_DEFAULT);
+		period, COUNT_DIGITS_NOT_WHOLE_DEFAULT, sign);
 	_rational = _exponentialNotation.GetRationalNumberFromPeriod();
 	_currentCountDigitsNotWhole = _exponentialNotation.GetCurrentCountDigitsNotWhole();
 }
@@ -45,13 +45,7 @@ ServerRationalNumber::ServerRationalNumber(ExponentialNotation exponentialNumber
 
 string ServerRationalNumber::ToString()
 {
-	bool doesExistsPeriod = _exponentialNotation.DoesExistsPeriodNumber();
-	string resultString = _exponentialNotation.ToString();
-	//if (doesExistsPeriod)
-	//{
-	//	resultString += " или в виде числа с периодом: " + _exponentialNotation.ToString(true);
-	//}
-	return resultString;
+    return _exponentialNotation.ToString() + " Accuracy = " + to_string(_currentCountDigitsNotWhole);
 }
 
 RationalNumerics ServerRationalNumber::GetRationalNumber()

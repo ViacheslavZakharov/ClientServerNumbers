@@ -52,7 +52,7 @@ StackList<ClientNumber> FormulaRecognition::Calculate(string formula)
 			ServerRationalNumber serverRationalNumber = ServerRationalNumber();
 			// Если число задано в виде a,b(c).
 			if (period != "") {
-				serverRationalNumber = ServerRationalNumber(digitsBeforePeriodWhole, digitsBeforePeriodNotWhole, period);
+				serverRationalNumber = ServerRationalNumber(digitsBeforePeriodWhole, digitsBeforePeriodNotWhole, period, 1);
 			}
 			else {
 				string numerator = formula.substr(startIndexDigit, i - startIndexDigit);
